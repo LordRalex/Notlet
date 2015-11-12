@@ -3,3 +3,7 @@ build/
 .eclipse/
 .idea/
 nb-configuration.xml
+.settings/
+.classpath/
+.project/
+
