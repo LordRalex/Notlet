@@ -7,3 +7,4 @@ nb-configuration.xml
 .classpath/
 .project/
 
+dependency-reduced-pom.xml
