@@ -129,7 +129,7 @@ public class JsonConfiguration implements Configuration {
         return root.getKeys();
     }
 
-    class JsonConfigurationSection implements ConfigurationSection {
+    private class JsonConfigurationSection implements ConfigurationSection {
 
         final Map<String, Object> _internal = new TreeMap<>();
 
@@ -220,7 +220,7 @@ public class JsonConfiguration implements Configuration {
 
     }
 
-    class JsonConfigurationSectionAdapter extends TypeAdapter<JsonConfigurationSection> {
+    private class JsonConfigurationSectionAdapter extends TypeAdapter<JsonConfigurationSection> {
 
         @Override
         public void write(JsonWriter out, JsonConfigurationSection value) throws IOException {

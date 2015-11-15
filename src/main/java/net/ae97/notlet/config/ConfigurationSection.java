@@ -19,10 +19,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-/**
- *
- * @author Joshua
- */
 public interface ConfigurationSection extends Serializable {
 
     public String getString(String path);

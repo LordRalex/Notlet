@@ -23,9 +23,27 @@
  */
 package net.ae97.notlet.server;
 
+import java.io.File;
+import java.io.IOException;
+import net.ae97.notlet.config.Configuration;
+import net.ae97.notlet.config.JsonConfiguration;
+import net.ae97.notlet.server.database.Database;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        //load a configuration containing the server information
+        Configuration config = new JsonConfiguration();
+        config.load(new File("config.json"));
+
+        //initialize database connection
+        String dbHost = config.getString("database.host", "localhost");
+        int dbPort = config.getInt("database.port", 3306);
+        String dbUser = config.getString("database.user", "notlet");
+        String dbPass = config.getString("database.pass", "");
+        String dbDb = config.getString("database.database", "notlet");
+        Database.init(dbHost, dbPort, dbDb, dbUser, dbPass);
 
     }
 

@@ -18,14 +18,24 @@ package net.ae97.notlet.config;
 import java.io.File;
 import java.io.IOException;
 
-/**
- *
- * @author Joshua
- */
 public interface Configuration extends ConfigurationSection {
 
+    /**
+     * Saves this configuration to a file
+     *
+     * @param file File to save to
+     *
+     * @throws IOException Error
+     */
     public void save(File file) throws IOException;
 
+    /**
+     * Loads configuration from file
+     *
+     * @param file File to load from
+     *
+     * @throws IOException Error
+     */
     public void load(File file) throws IOException;
 
 }
