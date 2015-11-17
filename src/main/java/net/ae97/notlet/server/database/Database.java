@@ -66,19 +66,16 @@ public class Database {
         return stmt;
     }
 
-    private final String host, database, user, pass;
-    private final int port;
+    private final String connectionString, user, pass;
 
     private Database(String host, int port, String database, String username, String password) {
-        this.host = host;
-        this.port = port;
-        this.database = database;
         this.user = username;
         this.pass = password;
+        this.connectionString = "jdbc:mysql://" + host + ":" + port + "/" + database;
     }
 
     private Connection open() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user, pass);
+        return DriverManager.getConnection(connectionString, user, pass);
     }
 
 }
