@@ -21,35 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.server;
+package net.ae97.notlet.server.crypto;
 
-import java.io.File;
-import java.io.IOException;
-import net.ae97.notlet.config.Configuration;
-import net.ae97.notlet.config.JsonConfiguration;
-import net.ae97.notlet.server.database.Database;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-public class Main {
+public class HashGenerator {
 
-    public static void main(String[] args) throws IOException {
+    private static final MessageDigest hashGen;
 
-        //load a configuration containing the server information
-        Configuration config = new JsonConfiguration();
-        config.load(new File("config.json"));
+    static {
+        try {
+            hashGen = MessageDigest.getInstance("SHA-2");
+        } catch (NoSuchAlgorithmException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-        //initialize database connection
-        String dbHost = config.getString("database.host", "localhost");
-        int dbPort = config.getInt("database.port", 3306);
-        String dbUser = config.getString("database.user", "notlet");
-        String dbPass = config.getString("database.pass", "");
-        String dbDb = config.getString("database.database", "notlet");
-        Database.init(dbHost, dbPort, dbDb, dbUser, dbPass);
+    private HashGenerator() {
+    }
 
-        String bindHost = config.getString("bind.host", "0.0.0.0");
-        int bindPort = config.getInt("bind.port", 9687);
-        CoreServer server = new CoreServer(bindHost, bindPort);
-
-        server.start();
+    public static String hash(String msg) {
+        synchronized (hashGen) {
+            return new String(hashGen.digest(msg.getBytes()));
+        }
     }
 
 }

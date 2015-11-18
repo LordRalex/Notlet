@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,35 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.server;
+package net.ae97.notlet.server.engine;
 
-import java.io.File;
 import java.io.IOException;
-import net.ae97.notlet.config.Configuration;
-import net.ae97.notlet.config.JsonConfiguration;
-import net.ae97.notlet.server.database.Database;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import net.ae97.notlet.server.Client;
 
-public class Main {
+public class ConnectionEngine extends Thread {
 
-    public static void main(String[] args) throws IOException {
+    private final String host;
+    private final int port;
 
-        //load a configuration containing the server information
-        Configuration config = new JsonConfiguration();
-        config.load(new File("config.json"));
+    public ConnectionEngine(String host, int port) {
+        super();
+        this.host = host;
+        this.port = port;
+    }
 
-        //initialize database connection
-        String dbHost = config.getString("database.host", "localhost");
-        int dbPort = config.getInt("database.port", 3306);
-        String dbUser = config.getString("database.user", "notlet");
-        String dbPass = config.getString("database.pass", "");
-        String dbDb = config.getString("database.database", "notlet");
-        Database.init(dbHost, dbPort, dbDb, dbUser, dbPass);
-
-        String bindHost = config.getString("bind.host", "0.0.0.0");
-        int bindPort = config.getInt("bind.port", 9687);
-        CoreServer server = new CoreServer(bindHost, bindPort);
-
-        server.start();
+    @Override
+    public void run() {
+        try (ServerSocket server = new ServerSocket(port, 5, InetAddress.getByName(host))) {
+            Socket socket = server.accept();
+            Client client = new Client(socket);
+            client.start();
+        } catch (IOException e) {
+            
+        }
     }
 
 }

@@ -21,35 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.server;
+package net.ae97.notlet.server.engine;
 
-import java.io.File;
-import java.io.IOException;
-import net.ae97.notlet.config.Configuration;
-import net.ae97.notlet.config.JsonConfiguration;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.ae97.notlet.server.crypto.HashGenerator;
 import net.ae97.notlet.server.database.Database;
 
-public class Main {
+public class AuthenticationEngine {
 
-    public static void main(String[] args) throws IOException {
-
-        //load a configuration containing the server information
-        Configuration config = new JsonConfiguration();
-        config.load(new File("config.json"));
-
-        //initialize database connection
-        String dbHost = config.getString("database.host", "localhost");
-        int dbPort = config.getInt("database.port", 3306);
-        String dbUser = config.getString("database.user", "notlet");
-        String dbPass = config.getString("database.pass", "");
-        String dbDb = config.getString("database.database", "notlet");
-        Database.init(dbHost, dbPort, dbDb, dbUser, dbPass);
-
-        String bindHost = config.getString("bind.host", "0.0.0.0");
-        int bindPort = config.getInt("bind.port", 9687);
-        CoreServer server = new CoreServer(bindHost, bindPort);
-
-        server.start();
+    public static boolean validate(String username, String password) {
+        String hashedPw = HashGenerator.hash(password);
+        try {
+            ResultSet set = Database.executeWithResults("SELECT password FROM auth WHERE username = ?", username);
+            if (set.first()) {
+                String pw = set.getString("password");
+                return pw.equals(hashedPw);
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthenticationEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
 }
