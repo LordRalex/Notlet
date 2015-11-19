@@ -25,11 +25,13 @@ package net.ae97.notlet.server;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 import net.ae97.notlet.server.engine.ConnectionEngine;
 import net.ae97.notlet.server.engine.GameEngine;
 
 public class CoreServer {
 
+    private static final Logger logger = Logger.getLogger("NotLet-Server");
     private final ConnectionEngine connectionEngine;
     private final List<GameEngine> games;
 
@@ -48,6 +50,10 @@ public class CoreServer {
 
     public List<GameEngine> getGames() {
         return games;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 
 }

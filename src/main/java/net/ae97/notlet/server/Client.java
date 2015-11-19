@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
 import net.ae97.notlet.network.ErrorPacket;
 import net.ae97.notlet.network.LoginPacket;
 import net.ae97.notlet.network.Packet;
@@ -70,6 +71,7 @@ public class Client extends Thread {
                                 break;
                             }
                         } catch (Exception ex) {
+                            CoreServer.getLogger().log(Level.SEVERE, "Error handling client packet", ex);
                             //handling packet failed, assuming that we can still run though
                             //however, if any of the sockets are closed, we need to terminate
                             if (socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed()) {
@@ -80,7 +82,7 @@ public class Client extends Thread {
                 }
             }
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            CoreServer.getLogger().log(Level.SEVERE, "Error on client connection", ex);
         } finally {
             out = null;
         }

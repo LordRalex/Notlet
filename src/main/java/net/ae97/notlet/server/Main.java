@@ -32,7 +32,6 @@ import net.ae97.notlet.server.database.Database;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
         //load a configuration containing the server information
         Configuration config = new JsonConfiguration();
         config.load(new File("config.json"));

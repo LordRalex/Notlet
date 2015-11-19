@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
 import javax.net.ssl.SSLServerSocketFactory;
 import net.ae97.notlet.server.Client;
+import net.ae97.notlet.server.CoreServer;
 
 public class ConnectionEngine extends Thread {
 
@@ -47,8 +49,8 @@ public class ConnectionEngine extends Thread {
             Socket socket = server.accept();
             Client client = new Client(socket);
             client.start();
-        } catch (IOException e) {
-
+        } catch (IOException ex) {
+            CoreServer.getLogger().log(Level.SEVERE, "Error on server creation", ex);
         }
     }
 
