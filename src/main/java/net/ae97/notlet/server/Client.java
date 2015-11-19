@@ -24,20 +24,21 @@
 package net.ae97.notlet.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 import net.ae97.notlet.network.ErrorPacket;
 import net.ae97.notlet.network.LoginPacket;
 import net.ae97.notlet.network.Packet;
 import net.ae97.notlet.network.SuccessPacket;
+import net.ae97.notlet.network.stream.EncryptedPacketInputStream;
+import net.ae97.notlet.network.stream.EncryptedPacketOutputStream;
 import net.ae97.notlet.server.engine.AuthenticationEngine;
 
 public class Client extends Thread {
 
     private final Socket socket;
     private State state;
-    private ObjectOutputStream out;
+    private EncryptedPacketOutputStream out;
 
     public Client(Socket socket) {
         this.socket = socket;
@@ -47,11 +48,11 @@ public class Client extends Thread {
     public void run() {
         boolean isAlive = true;
         try (Socket connection = socket) {
-            try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
+            try (EncryptedPacketOutputStream o = new EncryptedPacketOutputStream(socket.getOutputStream(), "replace-me")) {
                 this.out = o;
-                try (ObjectInputStream in = new ObjectInputStream(connection.getInputStream())) {
+                try (EncryptedPacketInputStream in = new EncryptedPacketInputStream(connection.getInputStream(), "replace-me")) {
                     while (isAlive) {
-                        Packet packet = (Packet) in.readObject();
+                        Packet packet = in.readPacket();
                         switch (packet.getType()) {
                             case Login: {
                                 if (state != State.Login) {
@@ -71,15 +72,14 @@ public class Client extends Thread {
                     }
                 }
             }
-        } catch (IOException | ClassNotFoundException ex) {
-
+        } catch (IOException | GeneralSecurityException ex) {
         } finally {
             out = null;
         }
     }
 
     public void sendPacket(Packet p) throws IOException {
-        out.writeObject(p);
+        out.sendPacket(p);
     }
 
     private enum State {
