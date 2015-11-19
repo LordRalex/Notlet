@@ -58,6 +58,9 @@ public class JsonConfiguration implements Configuration {
 
     @Override
     public void load(File file) throws IOException {
+        if (!file.exists()) {
+            return;
+        }
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(JsonConfigurationSection.class, new JsonConfigurationSectionAdapter())
                 .create();

@@ -25,6 +25,8 @@ package net.ae97.notlet.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
 import net.ae97.notlet.config.Configuration;
 import net.ae97.notlet.config.JsonConfiguration;
 import net.ae97.notlet.server.database.Database;
@@ -43,6 +45,14 @@ public class Main {
         String dbPass = config.getString("database.pass", "");
         String dbDb = config.getString("database.database", "notlet");
         Database.init(dbHost, dbPort, dbDb, dbUser, dbPass);
+
+        //test database connection
+        try {
+            Database.openConnection();
+        } catch (SQLException ex) {
+            CoreServer.getLogger().log(Level.SEVERE, "Could not connect to database", ex);
+            return;
+        }
 
         String bindHost = config.getString("bind.host", "0.0.0.0");
         int bindPort = config.getInt("bind.port", 9687);

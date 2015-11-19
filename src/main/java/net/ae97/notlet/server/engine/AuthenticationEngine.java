@@ -38,7 +38,7 @@ public class AuthenticationEngine {
             ResultSet set = Database.executeWithResults("SELECT password FROM auth WHERE username = ?", username);
             if (set.first()) {
                 String pw = set.getString("password");
-                return pw.equals(hashedPw);
+                return hashedPw.equals(pw);
             } else {
                 return false;
             }
