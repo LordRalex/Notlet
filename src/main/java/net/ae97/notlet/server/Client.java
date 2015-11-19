@@ -24,21 +24,20 @@
 package net.ae97.notlet.server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.security.GeneralSecurityException;
 import net.ae97.notlet.network.ErrorPacket;
 import net.ae97.notlet.network.LoginPacket;
 import net.ae97.notlet.network.Packet;
 import net.ae97.notlet.network.SuccessPacket;
-import net.ae97.notlet.network.stream.EncryptedPacketInputStream;
-import net.ae97.notlet.network.stream.EncryptedPacketOutputStream;
 import net.ae97.notlet.server.engine.AuthenticationEngine;
 
 public class Client extends Thread {
 
     private final Socket socket;
     private State state;
-    private EncryptedPacketOutputStream out;
+    private ObjectOutputStream out;
 
     public Client(Socket socket) {
         this.socket = socket;
@@ -48,38 +47,47 @@ public class Client extends Thread {
     public void run() {
         boolean isAlive = true;
         try (Socket connection = socket) {
-            try (EncryptedPacketOutputStream o = new EncryptedPacketOutputStream(socket.getOutputStream(), "replace-me")) {
+            try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
                 this.out = o;
-                try (EncryptedPacketInputStream in = new EncryptedPacketInputStream(connection.getInputStream(), "replace-me")) {
+                try (ObjectInputStream in = new ObjectInputStream(connection.getInputStream())) {
                     while (isAlive) {
-                        Packet packet = in.readPacket();
-                        switch (packet.getType()) {
-                            case Login: {
-                                if (state != State.Login) {
-                                    break;
+                        try {
+                            Packet packet = (Packet) in.readObject();
+                            switch (packet.getType()) {
+                                case Login: {
+                                    if (state != State.Login) {
+                                        break;
+                                    }
+                                    LoginPacket login = (LoginPacket) packet;
+                                    if (AuthenticationEngine.validate(login.getUser(), login.getPassword())) {
+                                        sendPacket(new SuccessPacket());
+                                        state = State.Game;
+                                    } else {
+                                        sendPacket(new ErrorPacket("Invalid username/password"));
+                                        isAlive = false;
+                                    }
                                 }
-                                LoginPacket login = (LoginPacket) packet;
-                                if (AuthenticationEngine.validate(login.getUser(), login.getPassword())) {
-                                    sendPacket(new SuccessPacket());
-                                    state = State.Game;
-                                } else {
-                                    sendPacket(new ErrorPacket("Invalid username/password"));
-                                    isAlive = false;
-                                }
+                                break;
                             }
-                            break;
+                        } catch (Exception ex) {
+                            //handling packet failed, assuming that we can still run though
+                            //however, if any of the sockets are closed, we need to terminate
+                            if (socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed()) {
+                                isAlive = false;
+                            }
                         }
                     }
                 }
             }
-        } catch (IOException | GeneralSecurityException ex) {
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         } finally {
             out = null;
         }
     }
 
-    public void sendPacket(Packet p) throws IOException {
-        out.sendPacket(p);
+    public synchronized void sendPacket(Packet p) throws IOException {
+        out.writeObject(p);
     }
 
     private enum State {

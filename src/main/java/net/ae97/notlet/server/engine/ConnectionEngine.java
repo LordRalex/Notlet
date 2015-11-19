@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import javax.net.ssl.SSLServerSocketFactory;
 import net.ae97.notlet.server.Client;
 
 public class ConnectionEngine extends Thread {
@@ -42,12 +43,12 @@ public class ConnectionEngine extends Thread {
 
     @Override
     public void run() {
-        try (ServerSocket server = new ServerSocket(port, 5, InetAddress.getByName(host))) {
+        try (ServerSocket server = SSLServerSocketFactory.getDefault().createServerSocket(port, 5, InetAddress.getByName(host))) {
             Socket socket = server.accept();
             Client client = new Client(socket);
             client.start();
         } catch (IOException e) {
-            
+
         }
     }
 
