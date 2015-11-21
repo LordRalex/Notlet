@@ -23,11 +23,11 @@
  */
 package net.ae97.notlet.network;
 
-public enum PacketType {
+public class StartGamePacket implements Packet {
 
-    Login,
-    Success,
-    Error,
-    StartGame
+    @Override
+    public PacketType getType() {
+        return PacketType.StartGame;
+    }
 
 }
