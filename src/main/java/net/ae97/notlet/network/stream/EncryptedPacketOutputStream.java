@@ -32,7 +32,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import net.ae97.notlet.network.Packet;
+import net.ae97.notlet.network.packets.Packet;
 import org.apache.commons.lang3.SerializationUtils;
 
 public class EncryptedPacketOutputStream implements AutoCloseable {

@@ -36,20 +36,29 @@ public class GameEngine implements Runnable {
     private final Logger logger;
     private long tickCount = 0;
     private final int threadId;
+    private final int seed;
+    private final boolean isSingleLevel;
 
-    public GameEngine() {
+    public GameEngine(String seed) {
         synchronized (engineCounter) {
             engineCounter++;
             threadId = engineCounter;
         }
         logger = Logger.getLogger("Engine-" + threadId);
+        if (seed == null || seed.isEmpty()) {
+            isSingleLevel = false;
+            this.seed = 0;
+        } else {
+            isSingleLevel = true;
+            this.seed = seed.hashCode();
+        }
     }
 
     /**
      * Start the game engine
      */
     public void start() {
-        executor.scheduleAtFixedRate(this, 0, 500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(this, 0, 25, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -58,7 +67,7 @@ public class GameEngine implements Runnable {
     @Override
     public void run() {
         tickCount++;
-        logger.info("Ticking");
+        logger.info("Ticking " + tickCount);
     }
 
     /**

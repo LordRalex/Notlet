@@ -21,23 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.network;
+package net.ae97.notlet.network.packets;
 
-public class ErrorPacket implements Packet {
+public class StartGamePacket implements Packet {
 
-    private final String message;
+    private final String seed;
 
-    public ErrorPacket(String message) {
-        this.message = message;
+    public StartGamePacket(String seed) {
+        this.seed = seed;
     }
 
     @Override
     public PacketType getType() {
-        return PacketType.Error;
+        return PacketType.StartGame;
     }
 
-    public String getMessage() {
-        return message;
+    public String getSeed() {
+        return seed;
     }
 
 }

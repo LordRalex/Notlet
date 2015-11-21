@@ -21,13 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.network;
+package net.ae97.notlet.network.packets;
 
-public class SuccessPacket implements Packet {
+public class ErrorPacket implements Packet {
+
+    private final String message;
+
+    public ErrorPacket(String message) {
+        this.message = message;
+    }
 
     @Override
     public PacketType getType() {
-        return PacketType.Success;
+        return PacketType.Error;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
 }

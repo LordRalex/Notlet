@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.network;
+package net.ae97.notlet.network.packets;
 
 public class LoginPacket implements Packet {
 

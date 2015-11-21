@@ -28,10 +28,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
-import net.ae97.notlet.network.ErrorPacket;
-import net.ae97.notlet.network.LoginPacket;
-import net.ae97.notlet.network.Packet;
-import net.ae97.notlet.network.SuccessPacket;
+import net.ae97.notlet.network.packets.ErrorPacket;
+import net.ae97.notlet.network.packets.LoginPacket;
+import net.ae97.notlet.network.packets.Packet;
+import net.ae97.notlet.network.packets.StartGamePacket;
+import net.ae97.notlet.network.packets.SuccessPacket;
 import net.ae97.notlet.server.engine.AuthenticationEngine;
 import net.ae97.notlet.server.engine.GameEngine;
 
@@ -55,14 +56,14 @@ public class Client extends Thread {
                 try (ObjectInputStream in = new ObjectInputStream(connection.getInputStream())) {
                     while (isAlive) {
                         try {
-                            Packet packet = (Packet) in.readObject();
-                            switch (packet.getType()) {
+                            Packet next = (Packet) in.readObject();
+                            switch (next.getType()) {
                                 case Login: {
                                     if (state != State.Login) {
                                         break;
                                     }
-                                    LoginPacket login = (LoginPacket) packet;
-                                    if (AuthenticationEngine.validate(login.getUser(), login.getPassword())) {
+                                    LoginPacket packet = (LoginPacket) next;
+                                    if (AuthenticationEngine.validate(packet.getUser(), packet.getPassword())) {
                                         sendPacket(new SuccessPacket());
                                         state = State.Game;
                                     } else {
@@ -71,10 +72,11 @@ public class Client extends Thread {
                                     }
                                 }
                                 case StartGame: {
+                                    StartGamePacket packet = (StartGamePacket) next;
                                     if (state != State.Pending) {
                                         break;
                                     }
-                                    game = new GameEngine();
+                                    game = new GameEngine(packet.getSeed());
                                     game.start();
 
                                     state = State.Game;

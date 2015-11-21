@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.network;
+package net.ae97.notlet.network.packets;
 
-public class StartGamePacket implements Packet {
+public class SuccessPacket implements Packet {
 
     @Override
     public PacketType getType() {
-        return PacketType.StartGame;
+        return PacketType.Success;
     }
 
 }

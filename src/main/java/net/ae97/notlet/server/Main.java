@@ -42,7 +42,7 @@ public class Main {
         String dbHost = config.getString("database.host", "localhost");
         int dbPort = config.getInt("database.port", 3306);
         String dbUser = config.getString("database.user", "notlet");
-        String dbPass = config.getString("database.pass", "");
+        String dbPass = config.getString("database.pass", "notlet");
         String dbDb = config.getString("database.database", "notlet");
         Database.init(dbHost, dbPort, dbDb, dbUser, dbPass);
 
