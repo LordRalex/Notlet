@@ -43,7 +43,6 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        System.err.println("Test");
 
         //load a configuration containing the server information
         Configuration config = new JsonConfiguration();
