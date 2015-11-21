@@ -42,7 +42,7 @@ public class GameEngine implements Runnable {
             engineCounter++;
             threadId = engineCounter;
         }
-        logger = Logger.getLogger("GameEngine-" + threadId);
+        logger = Logger.getLogger("Engine-" + threadId);
     }
 
     /**
@@ -58,7 +58,7 @@ public class GameEngine implements Runnable {
     @Override
     public void run() {
         tickCount++;
-
+        logger.info("Ticking");
     }
 
     /**

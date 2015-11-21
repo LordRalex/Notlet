@@ -31,7 +31,7 @@ import net.ae97.notlet.server.engine.GameEngine;
 
 public class CoreServer {
 
-    private static final Logger logger = Logger.getLogger("NotLet-Server");
+    private static final Logger logger = Logger.getLogger("Core");
     private final ConnectionEngine connectionEngine;
     private final List<GameEngine> games;
 
