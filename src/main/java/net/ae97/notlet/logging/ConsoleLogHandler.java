@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.server;
+package net.ae97.notlet.logging;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Logger;
-import net.ae97.notlet.logging.LoggerFactory;
-import net.ae97.notlet.server.engine.ConnectionEngine;
-import net.ae97.notlet.server.engine.GameEngine;
+import java.util.logging.ConsoleHandler;
 
-public class CoreServer {
+public class ConsoleLogHandler extends ConsoleHandler {
 
-    private static final Logger logger = LoggerFactory.create("Core");
-    private final ConnectionEngine connectionEngine;
-    private final List<GameEngine> games;
-
-    public CoreServer(String host, int port) {
-        connectionEngine = new ConnectionEngine(host, port);
-        games = new LinkedList<>();
+    public ConsoleLogHandler() {
+        super();
+        this.setFormatter(new SimpleLogFormatter());
     }
-
-    public void start() {
-        connectionEngine.start();
-    }
-
-    public void startGame() {
-
-    }
-
-    public List<GameEngine> getGames() {
-        return games;
-    }
-
-    public static Logger getLogger() {
-        return logger;
-    }
-
 }

@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import net.ae97.notlet.logging.LoggerFactory;
 
 public class GameEngine implements Runnable {
 
@@ -44,7 +45,7 @@ public class GameEngine implements Runnable {
             engineCounter++;
             threadId = engineCounter;
         }
-        logger = Logger.getLogger("Engine-" + threadId);
+        logger = LoggerFactory.create("Engine-" + threadId);
         if (seed == null || seed.isEmpty()) {
             isSingleLevel = false;
             this.seed = 0;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.server;
+package net.ae97.notlet.logging;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Logger;
-import net.ae97.notlet.logging.LoggerFactory;
-import net.ae97.notlet.server.engine.ConnectionEngine;
-import net.ae97.notlet.server.engine.GameEngine;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
 
-public class CoreServer {
+public class SimpleLogFormatter extends Formatter {
 
-    private static final Logger logger = LoggerFactory.create("Core");
-    private final ConnectionEngine connectionEngine;
-    private final List<GameEngine> games;
+    private final SimpleDateFormat date = new SimpleDateFormat("HH:mm:ss");
 
-    public CoreServer(String host, int port) {
-        connectionEngine = new ConnectionEngine(host, port);
-        games = new LinkedList<>();
+    @Override
+    public String format(LogRecord record) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[").append(date.format(record.getMillis())).append("]");
+        builder.append("[").append(record.getLoggerName()).append("]");
+        builder.append("[").append(record.getLevel().getLocalizedName().toUpperCase()).append("] ");
+        builder.append(record.getMessage());
+        builder.append('\n');
+        if (record.getThrown() != null) {
+            StringWriter writer = new StringWriter();
+            record.getThrown().printStackTrace(new PrintWriter(writer));
+            builder.append(writer);
+        }
+        return builder.toString();
     }
-
-    public void start() {
-        connectionEngine.start();
-    }
-
-    public void startGame() {
-
-    }
-
-    public List<GameEngine> getGames() {
-        return games;
-    }
-
-    public static Logger getLogger() {
-        return logger;
-    }
-
 }

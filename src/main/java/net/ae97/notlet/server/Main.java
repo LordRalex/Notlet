@@ -29,11 +29,22 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import net.ae97.notlet.config.Configuration;
 import net.ae97.notlet.config.JsonConfiguration;
+import net.ae97.notlet.logging.LoggerFactory;
+import net.ae97.notlet.logging.LoggerStream;
 import net.ae97.notlet.server.database.Database;
 
 public class Main {
 
+    static {
+        LoggerStream out = new LoggerStream(System.out, LoggerFactory.create("STDOUT"), Level.INFO);
+        LoggerStream err = new LoggerStream(System.err, LoggerFactory.create("STDERR"), Level.SEVERE);
+        System.setOut(out);
+        System.setErr(err);
+    }
+
     public static void main(String[] args) throws IOException {
+        System.err.println("Test");
+
         //load a configuration containing the server information
         Configuration config = new JsonConfiguration();
         config.load(new File("config.json"));

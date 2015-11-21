@@ -45,10 +45,10 @@ public class ConnectionEngine extends Thread {
 
     @Override
     public void run() {
-        CoreServer.getLogger().log(Level.INFO, "Starting server on {0}:{1}", new String[]{host, Integer.toString(port)});
+        CoreServer.getLogger().log(Level.INFO, "Starting server on " + host + ":" + port);
         try (ServerSocket server = SSLServerSocketFactory.getDefault().createServerSocket(port, 5, InetAddress.getByName(host))) {
             Socket socket = server.accept();
-            CoreServer.getLogger().log(Level.INFO, "Client connection [{0}]", socket.getRemoteSocketAddress());
+            CoreServer.getLogger().log(Level.INFO, "Client connection [" + socket.getRemoteSocketAddress() + "]");
             Client client = new Client(socket);
             client.start();
         } catch (IOException ex) {
