@@ -33,12 +33,14 @@ import net.ae97.notlet.network.LoginPacket;
 import net.ae97.notlet.network.Packet;
 import net.ae97.notlet.network.SuccessPacket;
 import net.ae97.notlet.server.engine.AuthenticationEngine;
+import net.ae97.notlet.server.engine.GameEngine;
 
 public class Client extends Thread {
 
     private final Socket socket;
     private State state;
     private ObjectOutputStream out;
+    private GameEngine game;
 
     public Client(Socket socket) {
         this.socket = socket;
@@ -68,6 +70,16 @@ public class Client extends Thread {
                                         isAlive = false;
                                     }
                                 }
+                                case StartGame: {
+                                    if (state != State.Pending) {
+                                        break;
+                                    }
+                                    game = new GameEngine();
+                                    game.start();
+
+                                    state = State.Game;
+                                    sendPacket(new SuccessPacket());
+                                }
                                 break;
                             }
                         } catch (Exception ex) {
@@ -94,6 +106,7 @@ public class Client extends Thread {
 
     private enum State {
 
+        Pending,
         Login,
         Game
     }

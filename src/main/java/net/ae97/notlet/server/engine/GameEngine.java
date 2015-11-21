@@ -23,6 +23,49 @@
  */
 package net.ae97.notlet.server.engine;
 
-public class GameEngine extends Thread {
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
+public class GameEngine implements Runnable {
+
+    //Indicates which game number is the newest
+    private static Integer engineCounter = 0;
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final Logger logger;
+    private long tickCount = 0;
+    private final int threadId;
+
+    public GameEngine() {
+        synchronized (engineCounter) {
+            engineCounter++;
+            threadId = engineCounter;
+        }
+        logger = Logger.getLogger("GameEngine-" + threadId);
+    }
+
+    /**
+     * Start the game engine
+     */
+    public void start() {
+        executor.scheduleAtFixedRate(this, 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Executes a single 'tick'
+     */
+    @Override
+    public void run() {
+        tickCount++;
+
+    }
+
+    /**
+     * Stops future ticks from occurring
+     */
+    public void stop() {
+        executor.shutdown();
+    }
 
 }
