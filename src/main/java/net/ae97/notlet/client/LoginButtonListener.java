@@ -50,7 +50,11 @@ public class LoginButtonListener implements ActionListener {
                 try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
                     Packet result = (Packet) in.readObject();
                     if (result.getType() == PacketType.Success) {
-                        o.writeObject(startGamePacket);
+                        LoadScreen loadScreen = new LoadScreen();
+                        
+        
+    
+                    	o.writeObject(startGamePacket);
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed");
                     }

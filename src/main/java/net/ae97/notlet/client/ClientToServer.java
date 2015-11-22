@@ -9,6 +9,6 @@ public class ClientToServer {
 
     public Socket makeSocket() throws IOException {
 
-        return SocketFactory.getDefault().createSocket("notlet.ae97.net", 9687);
+        return SocketFactory.getDefault().createSocket("192.168.19.10", 9687);
     }
 }
