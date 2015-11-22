@@ -32,7 +32,7 @@ public class HashGenerator {
 
     static {
         try {
-            hashGen = MessageDigest.getInstance("SHA-2");
+            hashGen = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }

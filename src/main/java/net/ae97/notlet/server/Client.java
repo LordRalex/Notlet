@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.ae97.notlet.network.packets.ErrorPacket;
 import net.ae97.notlet.network.packets.LoginPacket;
 import net.ae97.notlet.network.packets.Packet;
@@ -39,7 +40,7 @@ import net.ae97.notlet.server.engine.GameEngine;
 public class Client extends Thread {
 
     private final Socket socket;
-    private State state;
+    private State state = State.Login;
     private ObjectOutputStream out;
     private GameEngine game;
 
@@ -71,6 +72,7 @@ public class Client extends Thread {
                                         isAlive = false;
                                     }
                                 }
+                                break;
                                 case StartGame: {
                                     StartGamePacket packet = (StartGamePacket) next;
                                     if (state != State.Pending) {
@@ -96,7 +98,7 @@ public class Client extends Thread {
                 }
             }
         } catch (IOException ex) {
-            CoreServer.getLogger().log(Level.SEVERE, "Error on client connection", ex);
+            getLogger().log(Level.SEVERE, "Error on client connection", ex);
         } finally {
             out = null;
         }
@@ -104,6 +106,10 @@ public class Client extends Thread {
 
     public synchronized void sendPacket(Packet p) throws IOException {
         out.writeObject(p);
+    }
+
+    public Logger getLogger() {
+        return CoreServer.getLogger();
     }
 
     private enum State {

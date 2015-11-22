@@ -23,6 +23,8 @@
  */
 package net.ae97.notlet.server.engine;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -35,12 +37,16 @@ public class AuthenticationEngine {
     public static boolean validate(String username, String password) {
         String hashedPw = HashGenerator.hash(password);
         try {
-            ResultSet set = Database.executeWithResults("SELECT password FROM auth WHERE username = ?", username);
-            if (set.first()) {
-                String pw = set.getString("password");
-                return hashedPw.equals(pw);
-            } else {
-                return false;
+            try (Connection conn = Database.openConnection()) {
+                PreparedStatement stmt = conn.prepareStatement("SELECT password FROM auth WHERE username = ?");
+                stmt.setString(1, username);
+                ResultSet set = stmt.executeQuery();
+                if (set.first()) {
+                    String pw = set.getString("password");
+                    return hashedPw.equals(pw);
+                } else {
+                    return false;
+                }
             }
         } catch (SQLException ex) {
             CoreServer.getLogger().log(Level.SEVERE, "Error on database connection", ex);

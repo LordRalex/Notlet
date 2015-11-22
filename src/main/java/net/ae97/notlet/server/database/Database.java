@@ -26,7 +26,6 @@ package net.ae97.notlet.server.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Database {
@@ -48,13 +47,6 @@ public class Database {
         try (Connection conn = openConnection()) {
             PreparedStatement stmt = prepareStatement(conn, query, params);
             stmt.execute();
-        }
-    }
-
-    public static ResultSet executeWithResults(String query, Object... params) throws SQLException {
-        try (Connection conn = openConnection()) {
-            PreparedStatement stmt = prepareStatement(conn, query, params);
-            return stmt.executeQuery();
         }
     }
 
