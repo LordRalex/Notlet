@@ -75,7 +75,7 @@ public class LoginButtonListener implements ActionListener {
                     if (result.getType() == PacketType.Success) {
                     	o.writeObject(startGamePacket);
                         LoadScreen loadScreen = new LoadScreen();
-                    	Runtime.getRuntime().exec("cmd /c start run.bat");
+                    	Testing.main(new String[0]);
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed");
                     }
