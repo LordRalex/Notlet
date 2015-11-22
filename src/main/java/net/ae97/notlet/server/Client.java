@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import net.ae97.notlet.network.packets.ErrorPacket;
 import net.ae97.notlet.network.packets.LoginPacket;
 import net.ae97.notlet.network.packets.Packet;
+import net.ae97.notlet.network.packets.RegisterPacket;
 import net.ae97.notlet.network.packets.StartGamePacket;
 import net.ae97.notlet.network.packets.SuccessPacket;
 import net.ae97.notlet.server.engine.AuthenticationEngine;
@@ -70,6 +71,18 @@ public class Client extends Thread {
                                     } else {
                                         sendPacket(new ErrorPacket("Invalid username/password"));
                                         isAlive = false;
+                                    }
+                                }
+                                break;
+                                case Register: {
+                                    if (state != State.Login) {
+                                        break;
+                                    }
+                                    RegisterPacket packet = (RegisterPacket) next;
+                                    if (AuthenticationEngine.register(packet.getUser(), packet.getPassword())) {
+                                        sendPacket(new SuccessPacket());
+                                    } else {
+                                        sendPacket(new ErrorPacket("User already exists"));
                                     }
                                 }
                                 break;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,26 @@
  */
 package net.ae97.notlet.network.packets;
 
-public enum PacketType {
+public class RegisterPacket implements Packet {
 
-    Login,
-    Success,
-    Error,
-    StartGame,
-    Register;
+    private final String username, password;
+
+    public RegisterPacket(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public PacketType getType() {
+        return PacketType.Login;
+    }
+
+    public String getUser() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 
 }

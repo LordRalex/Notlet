@@ -54,4 +54,19 @@ public class AuthenticationEngine {
         }
     }
 
+    public static boolean register(String username, String password) {
+        String hashedPw = HashGenerator.hash(password);
+        try {
+            try (Connection conn = Database.openConnection()) {
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO AUTH (?, ?)");
+                stmt.setString(1, username);
+                stmt.setString(2, hashedPw);
+                stmt.execute();
+            }
+            return true;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+
 }
