@@ -68,7 +68,7 @@ public class Client extends Thread {
                                     LoginPacket packet = (LoginPacket) next;
                                     if (AuthenticationEngine.validate(packet.getUser(), packet.getPassword())) {
                                         sendPacket(new SuccessPacket());
-                                        state = State.Game;
+                                        state = State.Pending;
                                     } else {
                                         sendPacket(new ErrorPacket("Invalid username/password"));
                                         isAlive = false;
