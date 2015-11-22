@@ -43,6 +43,7 @@ public class LoginFrame extends JFrame {
     private final ButtonGroup group;
     private final JLabel seed;
     private final JTextField seedField;
+    private final JButton registerButton;
 
     public LoginFrame() {
         panel = new JPanel();
@@ -56,6 +57,7 @@ public class LoginFrame extends JFrame {
         continuous = new JRadioButton("continuous");
         replay = new JRadioButton("replay");
         group = new ButtonGroup();
+        registerButton = new JButton("Register");
         
         seed = new JLabel("Seed");
         seedField = new JTextField();
@@ -64,18 +66,19 @@ public class LoginFrame extends JFrame {
         group.add(replay); 	   
 
         setTitle("Notlet Login");
-        setSize(300,190);
+        setSize(300,200);
         setLocation(500, 280);
 
         usernameLabel.setBounds(10, 10, 80, 25);
         passwordLabel.setBounds(10, 40, 80, 25);
         usernameField.setBounds(100, 10, 160, 25);
         passwordField.setBounds(100, 40, 160, 25);
-        loginButton.setBounds(10, 130, 80, 25);
+        loginButton.setBounds(93, 130, 80, 25);
         continuous.setBounds(10, 70, 120, 25);
         replay.setBounds(192, 70, 80, 25);
+        registerButton.setBounds(180,130,100,25);
         
-   		seedField.setBounds(100, 100, 160, 25);
+        seedField.setBounds(100, 100, 160, 25);
         seed.setBounds(10,100,80,25);
         panel.add(seed);
         panel.add(seedField);
@@ -90,6 +93,7 @@ public class LoginFrame extends JFrame {
         panel.add(loginButton);
         panel.add(continuous);
         panel.add(replay);
+        panel.add(registerButton);
 
         continuous.setSelected(true);
         
