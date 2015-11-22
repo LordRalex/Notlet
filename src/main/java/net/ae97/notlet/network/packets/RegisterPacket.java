@@ -34,7 +34,7 @@ public class RegisterPacket implements Packet {
 
     @Override
     public PacketType getType() {
-        return PacketType.Login;
+        return PacketType.Register;
     }
 
     public String getUser() {

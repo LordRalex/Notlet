@@ -1,4 +1,3 @@
-
 package net.ae97.notlet.client;
 
 import java.awt.event.ActionEvent;
@@ -15,25 +14,27 @@ import net.ae97.notlet.network.packets.PacketType;
 import net.ae97.notlet.network.packets.RegisterPacket;
 
 public class RegisterButtonListener implements ActionListener {
-    
+
     private final LoginFrame loginFrame;
-    
+
     public RegisterButtonListener(LoginFrame loginFrame) {
         this.loginFrame = loginFrame;
     }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         String username;
         char[] password;
-        
+
         username = loginFrame.getUsernameField().getText().trim();
         password = loginFrame.getPasswordField().getPassword();
-        
+        RegisterPacket registerPacket = new RegisterPacket(username, new String(password));
+
         ClientToServer clientToSever = new ClientToServer();
         try (Socket socket = clientToSever.makeSocket()) {
-            RegisterPacket registerPacket = new RegisterPacket(username, new String(password));
-            try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
-                o.writeObject(registerPacket);
-                try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+            try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+                try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
+                    o.writeObject(registerPacket);
                     Packet result = (Packet) in.readObject();
                     if (result.getType() == PacketType.Success) {
                         JOptionPane.showMessageDialog(null, "Registration Successful");
@@ -48,5 +49,5 @@ public class RegisterButtonListener implements ActionListener {
             Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

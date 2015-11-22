@@ -23,6 +23,7 @@
  */
 package net.ae97.notlet.server;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -84,6 +85,7 @@ public class Client extends Thread {
                                     } else {
                                         sendPacket(new ErrorPacket("User already exists"));
                                     }
+                                    isAlive = false;
                                 }
                                 break;
                                 case StartGame: {
@@ -99,6 +101,8 @@ public class Client extends Thread {
                                 }
                                 break;
                             }
+                        } catch (EOFException ex) {
+                            isAlive = false;
                         } catch (Exception ex) {
                             CoreServer.getLogger().log(Level.SEVERE, "Error handling client packet", ex);
                             //handling packet failed, assuming that we can still run though

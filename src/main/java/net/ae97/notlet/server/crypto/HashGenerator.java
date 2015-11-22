@@ -41,9 +41,9 @@ public class HashGenerator {
     private HashGenerator() {
     }
 
-    public static String hash(String msg) {
+    public static byte[] hash(String msg) {
         synchronized (hashGen) {
-            return new String(hashGen.digest(msg.getBytes()));
+            return hashGen.digest(msg.getBytes());
         }
     }
 

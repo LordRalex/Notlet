@@ -35,15 +35,23 @@ import net.ae97.notlet.server.database.Database;
 public class AuthenticationEngine {
 
     public static boolean validate(String username, String password) {
-        String hashedPw = HashGenerator.hash(password);
+        byte[] hashedPw = HashGenerator.hash(password);
         try {
             try (Connection conn = Database.openConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("SELECT password FROM auth WHERE username = ?");
                 stmt.setString(1, username);
                 ResultSet set = stmt.executeQuery();
                 if (set.first()) {
-                    String pw = set.getString("password");
-                    return hashedPw.equals(pw);
+                    byte[] pw = set.getBytes("password");
+                    if (pw == null || pw.length != hashedPw.length) {
+                        return false;
+                    }
+                    for (int i = 0; i < pw.length; i++) {
+                        if (pw[i] != hashedPw[i]) {
+                            return false;
+                        }
+                    }
+                    return true;
                 } else {
                     return false;
                 }
@@ -55,12 +63,12 @@ public class AuthenticationEngine {
     }
 
     public static boolean register(String username, String password) {
-        String hashedPw = HashGenerator.hash(password);
+        byte[] hashedPw = HashGenerator.hash(password);
         try {
             try (Connection conn = Database.openConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO AUTH (?, ?)");
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO auth VALUES(?, ?)");
                 stmt.setString(1, username);
-                stmt.setString(2, hashedPw);
+                stmt.setBytes(2, hashedPw);
                 stmt.execute();
             }
             return true;
