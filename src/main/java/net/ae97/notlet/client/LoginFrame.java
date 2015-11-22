@@ -106,6 +106,9 @@ public class LoginFrame extends JFrame {
         LoginButtonListener loginListener = new LoginButtonListener(this);
         loginButton.addActionListener(loginListener);
         
+        RegisterButtonListener registerListener = new RegisterButtonListener(this);
+        registerButton.addActionListener(registerListener);
+        
         getContentPane().add(panel);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

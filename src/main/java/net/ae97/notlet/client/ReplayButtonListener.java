@@ -14,7 +14,8 @@ public class ReplayButtonListener implements ActionListener {
 	
     public void actionPerformed(ActionEvent e) {
         loginFrame.getSeedField().setVisible(true);
-        loginFrame.getSeed().setVisible(true);    
+        loginFrame.getSeed().setVisible(true); 
+        
     }
 
 }
