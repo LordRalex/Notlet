@@ -32,7 +32,7 @@ import net.ae97.notlet.logging.LoggerFactory;
 public class GameEngine implements Runnable {
 
     //Indicates which game number is the newest
-    private static Integer engineCounter = 0;
+    private static final EngineCounter engineCounter = new EngineCounter();
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger;
     private long tickCount = 0;
@@ -41,10 +41,7 @@ public class GameEngine implements Runnable {
     private final boolean isSingleLevel;
 
     public GameEngine(String seed) {
-        synchronized (engineCounter) {
-            engineCounter++;
-            threadId = engineCounter;
-        }
+        threadId = engineCounter.increment();
         logger = LoggerFactory.create("Engine-" + threadId);
         if (seed == null || seed.isEmpty()) {
             isSingleLevel = false;
@@ -69,13 +66,28 @@ public class GameEngine implements Runnable {
     public void run() {
         tickCount++;
         logger.info("Ticking " + tickCount);
+        if (tickCount == 1000) {
+            this.stop();
+        }
     }
 
     /**
      * Stops future ticks from occurring
      */
     public void stop() {
+        logger.info("Stopping");
         executor.shutdown();
+    }
+
+    private final static class EngineCounter {
+
+        private int counter;
+
+        public synchronized int increment() {
+            counter++;
+            return counter;
+        }
+
     }
 
 }
