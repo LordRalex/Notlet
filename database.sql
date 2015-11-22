@@ -2,10 +2,11 @@ CREATE DATABASE IF NOT EXISTS `notlet`;
 USE `notlet`;
 
 CREATE TABLE IF NOT EXISTS `auth` (
-  `username` varchar(16) NOT NULL,
-  `password` char(128) NOT NULL,
-  PRIMARY KEY (`username`)
+	`username` VARCHAR(16) NOT NULL,
+	`password` VARBINARY(256) NOT NULL,
+	PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE IF NOT EXISTS `scores` (
 	`username` VARCHAR(16) NOT NULL,
