@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class EntityAttackPacket implements Packet {
+public class EntityAttackPacket extends Packet {
 
     private final int sourceEntityId, targetEntityId;
 

@@ -26,7 +26,7 @@ package net.ae97.notlet.network.packets;
 import java.util.List;
 import net.ae97.notlet.entity.Entity;
 
-public class StartLevelPacket implements Packet {
+public class StartLevelPacket extends Packet {
 
     private final boolean[][] levelMap;
     private final List<Entity> entities;

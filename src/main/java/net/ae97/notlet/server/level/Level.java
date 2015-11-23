@@ -30,6 +30,7 @@ import java.util.Stack;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.HealthPotion;
+import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.entity.PointBooster;
 import net.ae97.notlet.entity.Skeleton;
 import net.ae97.notlet.entity.Slime;
@@ -122,11 +123,19 @@ public class Level {
         }
     }
 
+    public void spawnEntity(Entity entity) {
+        entities.add(entity);
+    }
+
     public void processTick() {
         synchronized (toKill) {
             entities.removeAll(toKill);
             toKill.clear();
         }
+    }
+
+    public Player getPlayer() {
+        return (Player) entities.stream().filter((e) -> (e instanceof Player)).findFirst().orElse(null);
     }
 
     private void fill(Random rng) {

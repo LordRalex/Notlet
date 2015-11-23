@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class ErrorPacket implements Packet {
+public class ErrorPacket extends Packet {
 
     private final String message;
 

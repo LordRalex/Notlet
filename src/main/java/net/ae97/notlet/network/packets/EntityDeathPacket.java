@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class EntityDeathPacket implements Packet {
+public class EntityDeathPacket extends Packet {
 
     private final int entityId;
 

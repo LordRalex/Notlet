@@ -21,32 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.entity;
+package net.ae97.notlet.network.packets;
 
-import net.ae97.notlet.Location;
-import net.ae97.notlet.server.level.Level;
+import net.ae97.notlet.Direction;
 
-/**
- * Created by john on 11/22/15.
- */
-public abstract class Item extends Entity {
+public abstract class DirectionalPacket extends Packet {
 
-    public Item(Location loc, int hp, int value, String sprite) {
-        super(loc, hp, value, sprite, 0);
+    protected final Direction direction;
+
+    public DirectionalPacket(Direction direction) {
+        this.direction = direction;
     }
 
-    public abstract void onPickup(Entity entity);
+    public Direction getDirection() {
+        return direction;
+    }
 
     @Override
-    public void processTick(Level level) {
-        for (Entity entity : level.getEntities()) {
-            if (entity == this || !(entity instanceof Player)) {
-                continue;
+    public boolean isEqual(Packet p) {
+        if (super.isEqual(p)) {
+            if (!(p instanceof DirectionalPacket)) {
+                return false;
             }
-            if (entity.hasCollidedWith(this)) {
-                onPickup(entity);
-                level.killEntity(this);
-            }
+            return getDirection() == ((DirectionalPacket) p).getDirection();
+        } else {
+            return false;
         }
     }
 

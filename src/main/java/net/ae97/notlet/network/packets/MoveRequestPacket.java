@@ -25,21 +25,15 @@ package net.ae97.notlet.network.packets;
 
 import net.ae97.notlet.Direction;
 
-public class MoveRequestPacket implements Packet {
-
-    private final Direction direction;
+public class MoveRequestPacket extends DirectionalPacket {
 
     public MoveRequestPacket(Direction direction) {
-        this.direction = direction;
+        super(direction);
     }
 
     @Override
     public PacketType getType() {
         return PacketType.MoveRequest;
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
 }

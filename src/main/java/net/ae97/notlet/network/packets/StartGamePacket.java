@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class StartGamePacket implements Packet {
+public class StartGamePacket extends Packet {
 
     private final String seed;
 

@@ -31,6 +31,6 @@ import net.ae97.notlet.Location;
 public class Skeleton extends Monster {
 
     public Skeleton(Location loc) {
-        super(loc, 50, 100, "skele");
+        super(loc, 50, 100, "skele", 0.06);
     }
 }

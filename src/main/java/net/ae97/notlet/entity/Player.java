@@ -37,9 +37,10 @@ public class Player extends Entity {
 
     private final Queue<Packet> requests = new LinkedList<>();
     private int score;
+    private int attackCooldown;
 
     public Player(Location loc) {
-        super(loc, 100, 200, "rangerD");
+        super(loc, 100, 200, "rangerD", 0.05);
     }
 
     @Override
@@ -47,11 +48,21 @@ public class Player extends Entity {
         synchronized (requests) {
             List<Packet> uniqueRequests = selectFirstUniquePackets(requests);
             for (Packet packet : uniqueRequests) {
-                switch(packet.getType()) {
-                    
+                switch (packet.getType()) {
+                    case MoveRequest: {
+
+                    }
+                    break;
+                    case AttackRequest: {
+
+                    }
+                    break;
                 }
             }
             requests.clear();
+        }
+        if (attackCooldown > 0) {
+            attackCooldown--;
         }
     }
 
@@ -75,7 +86,7 @@ public class Player extends Entity {
         for (Packet p : packetRequests) {
             unique = true;
             for (Packet t : packets) {
-                if (t.getType() == p.getType()) {
+                if (p.isEqual(t)) {
                     unique = false;
                     break;
                 }

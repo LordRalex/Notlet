@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class SuccessPacket implements Packet {
+public class SuccessPacket extends Packet {
 
     @Override
     public PacketType getType() {

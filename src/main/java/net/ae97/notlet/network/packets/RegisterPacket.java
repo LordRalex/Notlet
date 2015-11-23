@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class RegisterPacket implements Packet {
+public class RegisterPacket extends Packet {
 
     private final String username, password;
 

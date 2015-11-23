@@ -31,15 +31,32 @@ import net.ae97.notlet.server.level.Level;
  */
 public abstract class Monster extends Entity {
 
-    protected boolean isAggro = false;
-    protected Location targetLocation;
+    private boolean isAggro = false;
+    private Location targetLocation;
 
-    public Monster(Location loc, int hp, int value, String sprite) {
-        super(loc, hp, value, sprite);
+    public Monster(Location loc, int hp, int value, String sprite, double movementSpeed) {
+        super(loc, hp, value, sprite, movementSpeed);
     }
 
     @Override
     public void processTick(Level level) {
+        
+    }
+
+    public Location getTargetLocation() {
+        return targetLocation;
+    }
+
+    public void setTargetLocation(Location location) {
+        targetLocation = location;
+    }
+
+    public void setAggro(boolean newVal) {
+        isAggro = newVal;
+    }
+
+    public boolean isAggro() {
+        return isAggro;
     }
 
 }

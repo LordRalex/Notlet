@@ -32,28 +32,18 @@ import net.ae97.notlet.server.level.Level;
  */
 public abstract class Entity implements Serializable {
 
-    protected Location loc;
-    protected int hp;
-    protected int value;
-    protected String sprite;
+    private Location location;
+    private int hp;
+    private int value;
+    private final String sprite;
+    private double movementSpeed = 0;
 
-    public Entity(Location loc, int hp, int value, String sprite) {
-        this.loc = loc;
+    public Entity(Location loc, int hp, int value, String sprite, double movementSpeed) {
+        this.location = loc;
         this.hp = hp;
         this.value = value;
         this.sprite = sprite;
-    }
-
-    public final double distanceSquaredFrom(Location target) {
-        return Math.pow(loc.getX() - target.getX(), 2) + Math.pow(loc.getY() - target.getY(), 2);
-    }
-
-    public boolean hasCollidedWith(Entity en) {
-        return false;
-    }
-
-    public boolean isAt(Location loc) {
-        return false;
+        this.movementSpeed = movementSpeed;
     }
 
     public abstract void processTick(Level level);
@@ -65,19 +55,51 @@ public abstract class Entity implements Serializable {
         }
     }
 
-    public final Location getLocation() {
-        return loc;
+    public Location getLocation() {
+        return location;
     }
 
-    public final int getHp() {
+    public int getHp() {
         return hp;
     }
 
-    public final int getValue() {
+    public int getValue() {
         return value;
     }
 
-    public final String getSprite() {
+    public String getSprite() {
         return sprite;
+    }
+
+    public final double distanceSquaredFrom(Location target) {
+        return Math.pow(location.getX() - target.getX(), 2) + Math.pow(location.getY() - target.getY(), 2);
+    }
+
+    public boolean hasCollidedWith(Entity en) {
+        return false;
+    }
+
+    public boolean isAt(Location loc) {
+        return false;
+    }
+
+    public boolean canSee(Location location) {
+        return false;
+    }
+
+    public double getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public void setMovementSpeed(double movementSpeed) {
+        this.movementSpeed = movementSpeed;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

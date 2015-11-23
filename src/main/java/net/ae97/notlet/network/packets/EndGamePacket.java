@@ -23,7 +23,7 @@
  */
 package net.ae97.notlet.network.packets;
 
-public class EndGamePacket implements Packet {
+public class EndGamePacket extends Packet {
 
     private final int finalScore;
 

@@ -25,8 +25,12 @@ package net.ae97.notlet.network.packets;
 
 import java.io.Serializable;
 
-public interface Packet extends Serializable {
+public abstract class Packet implements Serializable {
 
-    public PacketType getType();
+    public abstract PacketType getType();
+
+    public boolean isEqual(Packet p) {
+        return false;
+    }
 
 }
