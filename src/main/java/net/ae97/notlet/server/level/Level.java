@@ -96,6 +96,39 @@ public class Level {
         populate(rng);
     }
 
+    public boolean[][] getMap() {
+        return map;
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
+    public boolean isPassable(Location loc) {
+        return map[(int) loc.getX()][(int) loc.getY()];
+    }
+
+    public int getSeed() {
+        return seed;
+    }
+
+    public int getSize() {
+        return map.length;
+    }
+
+    public void killEntity(Entity entity) {
+        synchronized (toKill) {
+            toKill.add(entity);
+        }
+    }
+
+    public void processTick() {
+        synchronized (toKill) {
+            entities.removeAll(toKill);
+            toKill.clear();
+        }
+    }
+
     private void fill(Random rng) {
         int i = 0;
         int j = 0;
@@ -159,35 +192,6 @@ public class Level {
                 }
             }
         }
-    }
-
-    public boolean[][] getMap() {
-        return map;
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
-    }
-
-    public boolean isPassable(Location loc) {
-        return map[(int) loc.getX()][(int) loc.getY()];
-    }
-
-    public int getSeed() {
-        return seed;
-    }
-
-    public int getSize() {
-        return map.length;
-    }
-
-    public void killEntity(Entity entity) {
-        toKill.add(entity);
-    }
-
-    public void processTick() {
-        entities.removeAll(toKill);
-        toKill.clear();
     }
 
 }

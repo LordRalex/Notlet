@@ -24,6 +24,7 @@
 package net.ae97.notlet.entity;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.network.packets.Packet;
@@ -35,6 +36,7 @@ import net.ae97.notlet.server.level.Level;
 public class Player extends Entity {
 
     private final Queue<Packet> requests = new LinkedList<>();
+    private int score;
 
     public Player(Location loc) {
         super(loc, 100, 200, "rangerD");
@@ -43,8 +45,11 @@ public class Player extends Entity {
     @Override
     public void processTick(Level level) {
         synchronized (requests) {
-            for (Packet p : requests) {
-
+            List<Packet> uniqueRequests = selectFirstUniquePackets(requests);
+            for (Packet packet : uniqueRequests) {
+                switch(packet.getType()) {
+                    
+                }
             }
             requests.clear();
         }
@@ -54,5 +59,32 @@ public class Player extends Entity {
         synchronized (requests) {
             requests.add(p);
         }
+    }
+
+    public void addScore(int value) {
+        score += value;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    private List<Packet> selectFirstUniquePackets(Queue<Packet> packetRequests) {
+        List<Packet> packets = new LinkedList<>();
+        boolean unique;
+        for (Packet p : packetRequests) {
+            unique = true;
+            for (Packet t : packets) {
+                if (t.getType() == p.getType()) {
+                    unique = false;
+                    break;
+                }
+            }
+            if (unique) {
+                packets.add(p);
+            }
+        }
+
+        return packets;
     }
 }

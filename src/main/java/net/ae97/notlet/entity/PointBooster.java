@@ -36,5 +36,10 @@ public class PointBooster extends Item {
 
     @Override
     public void onPickup(Entity entity) {
+        if (!(entity instanceof Player)) {
+            return;
+        }
+        Player p = (Player) entity;
+        p.addScore(getValue());
     }
 }

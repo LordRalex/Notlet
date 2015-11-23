@@ -50,6 +50,7 @@ public class GameEngine implements Runnable {
     private final Client client;
     private Player player;
     private Location endPoint;
+    private int tickCount = 0;
 
     public GameEngine(Client client, String seed) {
         this.client = client;
@@ -79,21 +80,26 @@ public class GameEngine implements Runnable {
      */
     @Override
     public void run() {
+        tickCount++;
         level.getEntities().stream().forEach((entity) -> {
             entity.processTick(level);
         });
+        level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
+            if (!(en instanceof Player)) {
+                return;
+            }
+            player.addScore(en.getValue());
+        });
         if (player.getHp() <= 0) {
-            sendPacket(new EndGamePacket());
+            sendPacket(new EndGamePacket(player.getScore()));
             stop();
             return;
         }
-        level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
-            level.killEntity(en);
-        });
+        level.processTick();
         if (player.isAt(endPoint)) {
             sendPacket(new EndLevelPacket());
             if (isSingleLevel) {
-                sendPacket(new EndGamePacket());
+                sendPacket(new EndGamePacket(player.getScore()));
                 stop();
                 return;
             } else {
@@ -103,7 +109,6 @@ public class GameEngine implements Runnable {
                 sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
             }
         }
-        level.processTick();
     }
 
     /**

@@ -25,9 +25,19 @@ package net.ae97.notlet.network.packets;
 
 public class EndGamePacket implements Packet {
 
+    private final int finalScore;
+
+    public EndGamePacket(int finalScore) {
+        this.finalScore = finalScore;
+    }
+
     @Override
     public PacketType getType() {
         return PacketType.EndGame;
+    }
+
+    public int getFinalScore() {
+        return finalScore;
     }
 
 }
