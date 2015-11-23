@@ -163,6 +163,10 @@ public class Level {
         return entities;
     }
 
+    public boolean isPassable(Location loc) {
+        return map[(int)loc.getX()][(int)loc.getY()];
+    }
+
     public int getSeed() {
         return seed;
     }
