@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,29 @@
  */
 package net.ae97.notlet.network.packets;
 
-public enum PacketType {
+import java.util.List;
+import net.ae97.notlet.entity.Entity;
 
-    Login,
-    Success,
-    Error,
-    StartGame,
-    EndGame,
-    Register,
-    MoveRequest,
-    AttackRequest,
-    EntityLocationUpdate,
-    EntityAttack,
-    EntityDeath,
-    EntitySpawn,
-    StartLevel,
-    EndLevel
-    
+public class StartLevelPacket implements Packet {
+
+    private final boolean[][] levelMap;
+    private final List<Entity> entities;
+
+    public StartLevelPacket(boolean[][] level, List<Entity> entities) {
+        this.levelMap = level;
+        this.entities = entities;
+    }
+
+    @Override
+    public PacketType getType() {
+        return PacketType.StartLevel;
+    }
+
+    public boolean[][] getMap() {
+        return levelMap;
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
+    }
 }

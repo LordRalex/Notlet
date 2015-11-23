@@ -5,12 +5,12 @@ import java.io.Serializable;
 /**
  * Created by john on 11/22/15.
  */
-public class Location implements Serializable{
+public class Location implements Serializable {
 
     double x;
     double y;
 
-    public Location(){
+    public Location() {
         this.x = 0;
         this.y = 0;
     }
@@ -20,9 +20,24 @@ public class Location implements Serializable{
         this.y = y;
     }
 
-    public void setX(int x) {this.x = x;}
-    public void setY(int y) {this.y = y;}
-    public double getX() {return x;}
-    public double getY() {return y;}
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public boolean isEqual(Location obj) {
+        return (obj.x == this.x && obj.y == this.y);
+    }
 
 }

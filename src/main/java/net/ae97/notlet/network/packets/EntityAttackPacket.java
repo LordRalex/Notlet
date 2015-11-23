@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,26 @@
  */
 package net.ae97.notlet.network.packets;
 
-public enum PacketType {
+public class EntityAttackPacket implements Packet {
 
-    Login,
-    Success,
-    Error,
-    StartGame,
-    EndGame,
-    Register,
-    MoveRequest,
-    AttackRequest,
-    EntityLocationUpdate,
-    EntityAttack,
-    EntityDeath,
-    EntitySpawn,
-    StartLevel,
-    EndLevel
-    
+    private final int sourceEntityId, targetEntityId;
+
+    public EntityAttackPacket(int sourceId, int targetId) {
+        sourceEntityId = sourceId;
+        targetEntityId = targetId;
+    }
+
+    @Override
+    public PacketType getType() {
+        return PacketType.EntityAttack;
+    }
+
+    public int getSourceEntityId() {
+        return sourceEntityId;
+    }
+
+    public int getTargetEntityId() {
+        return targetEntityId;
+    }
+
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,23 @@
  */
 package net.ae97.notlet.network.packets;
 
-public enum PacketType {
+import net.ae97.notlet.Direction;
 
-    Login,
-    Success,
-    Error,
-    StartGame,
-    EndGame,
-    Register,
-    MoveRequest,
-    AttackRequest,
-    EntityLocationUpdate,
-    EntityAttack,
-    EntityDeath,
-    EntitySpawn,
-    StartLevel,
-    EndLevel
-    
+public class AttackRequestPacket implements Packet {
+
+    private final Direction direction;
+
+    public AttackRequestPacket(Direction direction) {
+        this.direction = direction;
+    }
+
+    @Override
+    public PacketType getType() {
+        return PacketType.AttackRequest;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
 }

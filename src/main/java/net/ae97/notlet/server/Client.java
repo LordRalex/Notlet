@@ -93,11 +93,10 @@ public class Client extends Thread {
                                     if (state != State.Pending) {
                                         break;
                                     }
-                                    game = new GameEngine(packet.getSeed());
+                                    game = new GameEngine(this, packet.getSeed());
                                     game.start();
 
                                     state = State.Game;
-                                    sendPacket(new SuccessPacket());
                                 }
                                 break;
                             }
