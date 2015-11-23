@@ -23,7 +23,17 @@
  */
 package net.ae97.notlet.server.level;
 
+import net.ae97.notlet.entity.Entity;
+import net.ae97.notlet.Location;
+import net.ae97.notlet.entity.Skeleton;
+import net.ae97.notlet.entity.Slime;
+import net.ae97.notlet.entity.PointBooster;
+import net.ae97.notlet.entity.HealthPotion;
+
 import java.util.Random;
+import java.util.List;
+import java.util.LinkedList;
+
 
 /**
  * @author John
@@ -32,6 +42,7 @@ public class Level {
 
     private final int seed;
     private boolean[][] map = new boolean[0][0];
+    private final List<Entity> entities = new LinkedList<>();
 
     public Level() {
         this(new Random().nextInt());
@@ -82,6 +93,7 @@ public class Level {
             }
         }
         fill(rng);
+        populate(rng);
     }
 
     private void fill(Random rng) {
@@ -124,8 +136,31 @@ public class Level {
         }
     }
 
+    private void populate(Random rng) {
+
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j]) {
+                    if (rng.nextInt(4) == 1) {
+                        if (rng.nextInt(4) == 1) {entities.add(new Skeleton(new Location(i,j)));} else {entities.add(new Skeleton(new Location(i,j)));}
+                    }
+                    else {
+                        switch (rng.nextInt(37)){
+                            case 1: entities.add(new PointBooster(new Location(i,j))); break;
+                            case 2: entities.add(new HealthPotion(new Location(i,j))); break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public boolean[][] getMap() {
         return map;
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
     }
 
     public int getSeed() {
