@@ -18,4 +18,16 @@ public abstract class Entity implements Serializable {
         this.loc = loc;
     }
 
+    public double distanceSquaredFrom(Location loc) {
+        return Math.pow((this.loc.getX() - loc.getX()), 2) + Math.pow((this.loc.getY() - loc.getY()), 2);
+    }
+
+    public boolean isCollidedWith(Entity e) {
+        return false;
+    }
+
+    public void processTick() {
+
+    }
+
 }
