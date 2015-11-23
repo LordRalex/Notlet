@@ -99,6 +99,12 @@ public class Client extends Thread {
                                     state = State.Game;
                                 }
                                 break;
+                                default: {
+                                    if(state != State.Game || game == null) {
+                                        break;
+                                    }
+                                    game.handleGamePacket(next);
+                                }
                             }
                         } catch (EOFException ex) {
                             isAlive = false;

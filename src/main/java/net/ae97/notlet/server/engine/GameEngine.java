@@ -29,9 +29,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import net.ae97.notlet.Location;
-import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.logging.LoggerFactory;
+import net.ae97.notlet.network.packets.EndGamePacket;
+import net.ae97.notlet.network.packets.EndLevelPacket;
+import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
 import net.ae97.notlet.server.Client;
 import net.ae97.notlet.server.level.Level;
@@ -42,7 +44,6 @@ public class GameEngine implements Runnable {
     private static final EngineCounter engineCounter = new EngineCounter();
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger;
-    private long tickCount = 0;
     private final int threadId;
     private Level level;
     private final boolean isSingleLevel;
@@ -78,18 +79,31 @@ public class GameEngine implements Runnable {
      */
     @Override
     public void run() {
-        tickCount++;
-        logger.info("Ticking " + tickCount);
-        if (tickCount == 1000) {
-            this.stop();
+        level.getEntities().stream().forEach((entity) -> {
+            entity.processTick(level);
+        });
+        if (player.getHp() <= 0) {
+            sendPacket(new EndGamePacket());
+            stop();
+            return;
         }
-        for (Entity entity : level.getEntities()) {
-
+        level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
+            level.killEntity(en);
+        });
+        if (player.isAt(endPoint)) {
+            sendPacket(new EndLevelPacket());
+            if (isSingleLevel) {
+                sendPacket(new EndGamePacket());
+                stop();
+                return;
+            } else {
+                level = new Level();
+                level.generate();
+                endPoint = new Location(level.getSize(), level.getSize());
+                sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
+            }
         }
-        if (player.getLocation().isEqual(endPoint)) {
-            //send endlevel packet
-            //if not single level, start new level, otherwise send endgame packet
-        }
+        level.processTick();
     }
 
     /**
@@ -100,11 +114,16 @@ public class GameEngine implements Runnable {
         executor.shutdown();
     }
 
-    private void startNewLevel() throws IOException {
-        level = new Level();
-        level.generate();
-        endPoint = new Location(level.getSize(), level.getSize());
-        client.sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
+    public void handleGamePacket(Packet p) {
+        player.addToQueue(p);
+    }
+
+    private void sendPacket(Packet p) {
+        try {
+            client.sendPacket(p);
+        } catch (IOException ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error on sending packet", ex);
+        }
     }
 
     private final static class EngineCounter {

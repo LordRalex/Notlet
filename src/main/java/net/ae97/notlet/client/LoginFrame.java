@@ -48,7 +48,7 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         panel = new JPanel();
         panel.setLayout(null);
-        
+
         loginButton = new JButton("Start!");
         usernameField = new JTextField(15);
         passwordField = new JPasswordField(15);
@@ -58,15 +58,15 @@ public class LoginFrame extends JFrame {
         replay = new JRadioButton("replay");
         group = new ButtonGroup();
         registerButton = new JButton("Register");
-        
+
         seed = new JLabel("Seed");
         seedField = new JTextField();
 
-        group.add(continuous); 
-        group.add(replay); 	   
+        group.add(continuous);
+        group.add(replay);
 
         setTitle("Notlet Login");
-        setSize(300,200);
+        setSize(300, 200);
         setLocation(500, 280);
 
         usernameLabel.setBounds(10, 10, 80, 25);
@@ -76,13 +76,13 @@ public class LoginFrame extends JFrame {
         loginButton.setBounds(93, 130, 80, 25);
         continuous.setBounds(10, 70, 120, 25);
         replay.setBounds(192, 70, 80, 25);
-        registerButton.setBounds(180,130,100,25);
-        
+        registerButton.setBounds(180, 130, 100, 25);
+
         seedField.setBounds(100, 100, 160, 25);
-        seed.setBounds(10,100,80,25);
+        seed.setBounds(10, 100, 80, 25);
         panel.add(seed);
         panel.add(seedField);
-        
+
         seedField.setVisible(false);
         seed.setVisible(false);
 
@@ -96,43 +96,42 @@ public class LoginFrame extends JFrame {
         panel.add(registerButton);
 
         continuous.setSelected(true);
-        
+
         ReplayButtonListener listener = new ReplayButtonListener(this);
         replay.addActionListener(listener);
-        
+
         ContinuousButtonListener clistener = new ContinuousButtonListener(this);
         continuous.addActionListener(clistener);
-        
+
         LoginButtonListener loginListener = new LoginButtonListener(this);
         loginButton.addActionListener(loginListener);
-        
+
         RegisterButtonListener registerListener = new RegisterButtonListener(this);
         registerButton.addActionListener(registerListener);
-        
+
         getContentPane().add(panel);
-        
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
+
     public JTextField getUsernameField() {
-    	return usernameField;
+        return usernameField;
     }
 
-	public JLabel getSeed() {
-		return seed;
-	}
+    public JLabel getSeed() {
+        return seed;
+    }
 
-	public JPasswordField getPasswordField() {
-		return passwordField;
-	}
+    public JPasswordField getPasswordField() {
+        return passwordField;
+    }
 
-	public JRadioButton getContinuous() {
-		return continuous;
-	}
+    public JRadioButton getContinuous() {
+        return continuous;
+    }
 
-	public JTextField getSeedField() {
-		return seedField;
-	}
-    
-    
+    public JTextField getSeedField() {
+        return seedField;
+    }
+
 }
