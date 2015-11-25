@@ -29,18 +29,25 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import net.ae97.notlet.client.Testing;
+import net.ae97.notlet.client.network.ServerConnection;
+import net.ae97.notlet.network.packets.StartGamePacket;
 
 public class LoadScreen extends JFrame {
 
-    public LoadScreen() {
+    private final ServerConnection connection;
+    private final String seed;
+
+    public LoadScreen(ServerConnection connection, String seed) {
+        super();
+        this.connection = connection;
+        this.seed = seed;
         setTitle("Notlet");
         setSize(500, 150);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setUndecorated(true);
         setVisible(true);
         setLayout(new BorderLayout());
-        //TODO: Use right path here
-        setContentPane(new JLabel(new ImageIcon("/home/x/Downloads/BIGLET.png")));
+        setContentPane(new JLabel(new ImageIcon(getClass().getResource("/BIGLET.png"))));
         setLayout(new FlowLayout());
         repaint();
     }
@@ -51,6 +58,8 @@ public class LoadScreen extends JFrame {
                 synchronized (this) {
                     wait(3000);
                 }
+                StartGamePacket startGamePacket = new StartGamePacket(seed);
+                connection.sendPacket(startGamePacket);
                 dispose();
                 Testing.display();
             } catch (Exception e1) {

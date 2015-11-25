@@ -35,7 +35,6 @@ import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.LoginPacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.PacketType;
-import net.ae97.notlet.network.packets.StartGamePacket;
 
 public class LoginButtonListener implements ActionListener {
 
@@ -63,15 +62,13 @@ public class LoginButtonListener implements ActionListener {
         //TODO: Needs to be rewritten so that the socket is kept open
         //probably will need to make this entire process spawn elsewhere
         //maybe look at Client in general
-        try (ServerConnection socket = ServerConnection.open()) {
+        try {
+            ServerConnection socket = ServerConnection.open();
             LoginPacket loginPacket = new LoginPacket(username, password);
-            StartGamePacket startGamePacket = new StartGamePacket(seed);
-
             socket.sendPacket(loginPacket);
             Packet result = socket.readPacket();
             if (result.getType() == PacketType.Success) {
-                socket.sendPacket(startGamePacket);
-                LoadScreen loadScreen = new LoadScreen();
+                LoadScreen loadScreen = new LoadScreen(socket, seed);
                 loadScreen.start();
             } else {
                 JOptionPane.showMessageDialog(null, "Login Failed");
