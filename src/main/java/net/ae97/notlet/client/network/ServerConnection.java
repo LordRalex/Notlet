@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Joshua.
+ * Copyright 2015 AE97
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,10 +37,9 @@ public class ServerConnection implements AutoCloseable {
     private final ObjectOutputStream out;
 
     private ServerConnection() throws IOException {
-        super();
         socket = SocketFactory.getDefault().createSocket("notlet.ae97.net", 9687);
-        in = new ObjectInputStream(socket.getInputStream());
         out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());        
     }
 
     public static ServerConnection open() throws IOException {
@@ -58,6 +57,10 @@ public class ServerConnection implements AutoCloseable {
         } catch (ClassNotFoundException ex) {
             throw new IOException(ex);
         }
+    }
+
+    public boolean isClosed() {
+        return socket.isClosed();
     }
 
     @Override

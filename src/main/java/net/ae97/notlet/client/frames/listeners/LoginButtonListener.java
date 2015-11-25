@@ -64,12 +64,12 @@ public class LoginButtonListener implements ActionListener {
         //maybe look at Client in general
         try {
             ServerConnection socket = ServerConnection.open();
-            LoginPacket loginPacket = new LoginPacket(username, password);
-            socket.sendPacket(loginPacket);
+            socket.sendPacket(new LoginPacket(username, password));
             Packet result = socket.readPacket();
             if (result.getType() == PacketType.Success) {
                 LoadScreen loadScreen = new LoadScreen(socket, seed);
                 loadScreen.start();
+                loginFrame.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Login Failed");
             }

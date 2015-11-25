@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Joshua.
+ * Copyright 2015 AE97
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package net.ae97.notlet.client.network;
 
-public class GameProcessor {
+import java.io.IOException;
+import net.ae97.notlet.network.packets.Packet;
+
+public class GameProcessor extends Thread {
+
+    private final ServerConnection connection;
+
+    public GameProcessor(ServerConnection connection) {
+        super();
+        this.connection = connection;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (!connection.isClosed() && !this.isInterrupted()) {
+                Packet next = connection.readPacket();
+            }
+        } catch (IOException ex) {
+
+        } finally {
+            connection.close();
+        }
+    }
+
+    public void close() {
+        connection.close();
+        synchronized (this) {
+            this.interrupt();
+        }
+    }
 
 }

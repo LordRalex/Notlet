@@ -25,6 +25,7 @@ package net.ae97.notlet.client.frames;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -62,7 +63,7 @@ public class LoadScreen extends JFrame {
                 connection.sendPacket(startGamePacket);
                 dispose();
                 Testing.display();
-            } catch (Exception e1) {
+            } catch (InterruptedException | IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }

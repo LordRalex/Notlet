@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,28 @@
  */
 package net.ae97.notlet.client;
 
-public class Main {
+import java.awt.EventQueue;
+import java.util.logging.Logger;
+import net.ae97.notlet.client.frames.LoginFrame;
+import net.ae97.notlet.logging.LoggerFactory;
 
-    public static void main(String[] args) {
-        ClientCore.init();
-        ClientCore.start();
+public class ClientCore {
+
+    private static final Logger logger = LoggerFactory.create("Core");
+
+    public static void init() {
+
+    }
+
+    public static void start() {
+        EventQueue.invokeLater(() -> {
+            LoginFrame login = new LoginFrame();
+            login.setVisible(true);
+        });
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 
 }
