@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.client;
+package net.ae97.notlet.client.frames.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,16 +32,17 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import net.ae97.notlet.network.packets.LoginPacket;
+import net.ae97.notlet.client.ServerConnection;
+import net.ae97.notlet.client.frames.LoginFrame;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.PacketType;
-import net.ae97.notlet.network.packets.StartGamePacket;
+import net.ae97.notlet.network.packets.RegisterPacket;
 
-public class LoginButtonListener implements ActionListener {
+public class RegisterButtonListener implements ActionListener {
 
     private final LoginFrame loginFrame;
 
-    public LoginButtonListener(LoginFrame loginFrame) {
+    public RegisterButtonListener(LoginFrame loginFrame) {
         this.loginFrame = loginFrame;
     }
 
@@ -49,35 +50,20 @@ public class LoginButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String username;
         char[] password;
-        String seed;
+
         username = loginFrame.getUsernameField().getText().trim();
         password = loginFrame.getPasswordField().getPassword();
-        seed = loginFrame.getSeedField().getText().trim();
+        RegisterPacket registerPacket = new RegisterPacket(username, new String(password));
 
-        // If the continuous button is selected, seed should be null
-        if (loginFrame.getContinuous().isSelected() == true) {
-            seed = null;
-
-            // Otherwise you are doing replay, and which cannot be an empty string
-        } else if (loginFrame.getContinuous().isSelected() == false && seed.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please enter a seed");
-        }
-
-        ClientToServer clientToSever = new ClientToServer();
-        try (Socket socket = clientToSever.makeSocket()) {
-            LoginPacket loginPacket = new LoginPacket(username, new String(password));
-            StartGamePacket startGamePacket = new StartGamePacket(seed);
-
-            try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
-                o.writeObject(loginPacket);
-                try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+        try (Socket socket = ServerConnection.open()) {
+            try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+                try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
+                    o.writeObject(registerPacket);
                     Packet result = (Packet) in.readObject();
                     if (result.getType() == PacketType.Success) {
-                        o.writeObject(startGamePacket);
-                        LoadScreen loadScreen = new LoadScreen();
-                        Testing.main(new String[0]);
+                        JOptionPane.showMessageDialog(null, "Registration Successful");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Login Failed");
+                        JOptionPane.showMessageDialog(null, "Registration Failed");
                     }
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,7 +72,6 @@ public class LoginButtonListener implements ActionListener {
         } catch (IOException ex) {
             Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 }

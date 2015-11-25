@@ -21,23 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.client;
+package net.ae97.notlet.client.frames.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import net.ae97.notlet.client.frames.LoginFrame;
 
-public class ReplayButtonListener implements ActionListener {
+public class ContinuousButtonListener implements ActionListener {
 
     private final LoginFrame loginFrame;
 
-    public ReplayButtonListener(LoginFrame loginFrame) {
+    public ContinuousButtonListener(LoginFrame loginFrame) {
         this.loginFrame = loginFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        loginFrame.getSeedField().setVisible(true);
-        loginFrame.getSeed().setVisible(true);
+        loginFrame.getSeedField().setVisible(false);
+        loginFrame.getSeed().setVisible(false);
     }
 
 }

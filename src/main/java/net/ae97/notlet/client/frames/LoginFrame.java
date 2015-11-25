@@ -21,8 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.client;
+package net.ae97.notlet.client.frames;
 
+import net.ae97.notlet.client.frames.listeners.LoginButtonListener;
+import net.ae97.notlet.client.frames.listeners.ContinuousButtonListener;
+import net.ae97.notlet.client.frames.listeners.ReplayButtonListener;
+import net.ae97.notlet.client.frames.listeners.RegisterButtonListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;

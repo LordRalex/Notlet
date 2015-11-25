@@ -21,23 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.client;
+package net.ae97.notlet.client.frames;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import net.ae97.notlet.client.Testing;
 
-public class ContinuousButtonListener implements ActionListener {
+public class LoadScreen extends JFrame {
 
-    private final LoginFrame loginFrame;
-
-    public ContinuousButtonListener(LoginFrame loginFrame) {
-        this.loginFrame = loginFrame;
+    public LoadScreen() {
+        setTitle("Notlet");
+        setSize(500, 150);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setVisible(true);
+        setLayout(new BorderLayout());
+        //TODO: Use right path here
+        setContentPane(new JLabel(new ImageIcon("/home/x/Downloads/BIGLET.png")));
+        setLayout(new FlowLayout());
+        repaint();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        loginFrame.getSeedField().setVisible(false);
-        loginFrame.getSeed().setVisible(false);
+    public void start() {
+        new Thread(() -> {
+            try {
+                synchronized (this) {
+                    wait(3000);
+                }
+                dispose();
+                Testing.display();
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }).start();
     }
 
 }

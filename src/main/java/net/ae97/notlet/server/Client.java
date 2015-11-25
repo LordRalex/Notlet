@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ae97.notlet.network.packets.ErrorPacket;
@@ -100,13 +101,13 @@ public class Client extends Thread {
                                 }
                                 break;
                                 default: {
-                                    if(state != State.Game || game == null) {
+                                    if (state != State.Game || game == null) {
                                         break;
                                     }
                                     game.handleGamePacket(next);
                                 }
                             }
-                        } catch (EOFException ex) {
+                        } catch (EOFException | SocketException ex) {
                             isAlive = false;
                         } catch (Exception ex) {
                             CoreServer.getLogger().log(Level.SEVERE, "Error handling client packet", ex);
@@ -123,6 +124,10 @@ public class Client extends Thread {
             getLogger().log(Level.SEVERE, "Error on client connection", ex);
         } finally {
             out = null;
+            if (game != null) {
+                game.stop();
+                game = null;
+            }
         }
     }
 

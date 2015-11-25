@@ -23,16 +23,19 @@
  */
 package net.ae97.notlet.client;
 
-import java.awt.EventQueue;
-import net.ae97.notlet.client.frames.LoginFrame;
+import java.io.IOException;
+import java.net.Socket;
+import javax.net.SocketFactory;
 
-public class Main {
+// Method needs to be called from class.
+// TODO: This method of creation will not work in the future
+// This is actually going to be removed when the packet logic is implemented
+@Deprecated
+public class ServerConnection {
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            LoginFrame login = new LoginFrame();
-            login.setVisible(true);
-        });
+    @Deprecated
+    public static Socket open() throws IOException {
+
+        return SocketFactory.getDefault().createSocket("notlet.ae97.net", 9687);
     }
-
 }

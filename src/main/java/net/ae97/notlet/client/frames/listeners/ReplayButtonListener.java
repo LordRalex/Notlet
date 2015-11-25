@@ -21,39 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.client;
+package net.ae97.notlet.client.frames.listeners;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import net.ae97.notlet.client.frames.LoginFrame;
 
-public class LoadScreen extends JFrame {
+public class ReplayButtonListener implements ActionListener {
 
-    public LoadScreen() {
-        setTitle("Notlet");
-        setSize(500, 150);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setUndecorated(true);
-        setVisible(true);
-        setLayout(new BorderLayout());
-        //TODO: Use right path here
-        setContentPane(new JLabel(new ImageIcon("/home/x/Downloads/BIGLET.png")));
-        setLayout(new FlowLayout());
-        repaint();
+    private final LoginFrame loginFrame;
 
-        new Thread(() -> {
-            try {
-                synchronized (this) {
-                    wait(3000);
-                }
-                dispose();
-            } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        }).start();
+    public ReplayButtonListener(LoginFrame loginFrame) {
+        this.loginFrame = loginFrame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        loginFrame.getSeedField().setVisible(true);
+        loginFrame.getSeed().setVisible(true);
     }
 
 }

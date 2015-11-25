@@ -6,5 +6,5 @@ nb-configuration.xml
 .settings/
 .classpath/
 .project/
-
 dependency-reduced-pom.xml
+mbactions.xml
