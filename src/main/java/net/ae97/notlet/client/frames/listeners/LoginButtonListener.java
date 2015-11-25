@@ -26,15 +26,12 @@ package net.ae97.notlet.client.frames.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import net.ae97.notlet.client.ServerConnection;
 import net.ae97.notlet.client.frames.LoadScreen;
 import net.ae97.notlet.client.frames.LoginFrame;
+import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.LoginPacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.PacketType;
@@ -66,24 +63,18 @@ public class LoginButtonListener implements ActionListener {
         //TODO: Needs to be rewritten so that the socket is kept open
         //probably will need to make this entire process spawn elsewhere
         //maybe look at Client in general
-        try (Socket socket = ServerConnection.open()) {
+        try (ServerConnection socket = ServerConnection.open()) {
             LoginPacket loginPacket = new LoginPacket(username, password);
             StartGamePacket startGamePacket = new StartGamePacket(seed);
 
-            try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
-                o.writeObject(loginPacket);
-                try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-                    Packet result = (Packet) in.readObject();
-                    if (result.getType() == PacketType.Success) {
-                        o.writeObject(startGamePacket);
-                        LoadScreen loadScreen = new LoadScreen();
-                        loadScreen.start();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Login Failed");
-                    }
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            socket.sendPacket(loginPacket);
+            Packet result = socket.readPacket();
+            if (result.getType() == PacketType.Success) {
+                socket.sendPacket(startGamePacket);
+                LoadScreen loadScreen = new LoadScreen();
+                loadScreen.start();
+            } else {
+                JOptionPane.showMessageDialog(null, "Login Failed");
             }
         } catch (IOException ex) {
             Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);

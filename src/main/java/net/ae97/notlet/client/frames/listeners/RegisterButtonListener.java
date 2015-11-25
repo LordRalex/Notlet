@@ -26,14 +26,11 @@ package net.ae97.notlet.client.frames.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import net.ae97.notlet.client.ServerConnection;
 import net.ae97.notlet.client.frames.LoginFrame;
+import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.PacketType;
 import net.ae97.notlet.network.packets.RegisterPacket;
@@ -55,19 +52,13 @@ public class RegisterButtonListener implements ActionListener {
         password = loginFrame.getPasswordField().getPassword();
         RegisterPacket registerPacket = new RegisterPacket(username, new String(password));
 
-        try (Socket socket = ServerConnection.open()) {
-            try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-                try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
-                    o.writeObject(registerPacket);
-                    Packet result = (Packet) in.readObject();
-                    if (result.getType() == PacketType.Success) {
-                        JOptionPane.showMessageDialog(null, "Registration Successful");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Registration Failed");
-                    }
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        try (ServerConnection socket = ServerConnection.open()) {
+            socket.sendPacket(registerPacket);
+            Packet result = socket.readPacket();
+            if (result.getType() == PacketType.Success) {
+                JOptionPane.showMessageDialog(null, "Registration Successful");
+            } else {
+                JOptionPane.showMessageDialog(null, "Registration Failed");
             }
         } catch (IOException ex) {
             Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
