@@ -24,16 +24,21 @@
 package net.ae97.notlet.client;
 
 import java.awt.EventQueue;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.ae97.notlet.client.frames.LoginFrame;
 import net.ae97.notlet.logging.LoggerFactory;
+import net.ae97.notlet.logging.LoggerStream;
 
 public class ClientCore {
 
     private static final Logger logger = LoggerFactory.create("Core");
 
     public static void init() {
-
+        LoggerStream out = new LoggerStream(System.out, LoggerFactory.create("STDOUT"), Level.INFO);
+        LoggerStream err = new LoggerStream(System.err, LoggerFactory.create("STDERR"), Level.SEVERE);
+        System.setOut(out);
+        System.setErr(err);
     }
 
     public static void start() {

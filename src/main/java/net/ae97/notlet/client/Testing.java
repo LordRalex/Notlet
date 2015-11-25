@@ -328,7 +328,7 @@ public class Testing {
     ///
     // Start the example
     //
-    public void start() {
+    public void start() throws LWJGLException, IOException {
         initGL(800, 600);
         init();
 
@@ -352,15 +352,10 @@ public class Testing {
     // @param width The width of the display
     // @param height The height of the display
     //
-    private void initGL(int width, int height) {
-        try {
-            Display.setDisplayMode(new DisplayMode(width, height));
-            Display.create();
-            Display.setVSyncEnabled(true);
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+    private void initGL(int width, int height) throws LWJGLException {
+        Display.setDisplayMode(new DisplayMode(width, height));
+        Display.create();
+        Display.setVSyncEnabled(true);
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
@@ -382,23 +377,18 @@ public class Testing {
     //
     // Initialize resources
     //
-    public void init() {
+    public void init() throws IOException {
 
-        try {
-            // load texture from PNG file
-            texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("image.png"));
-            //dirt_Texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png"));
+        // load texture from PNG file
+        texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("image.png"));
+        //dirt_Texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png"));
 
-            System.out.println("Texture loaded: " + texture);
-            System.out.println(">> Image width: " + texture.getImageWidth());
-            System.out.println(">> Image height: " + texture.getImageHeight());
-            System.out.println(">> Texture width: " + texture.getTextureWidth());
-            System.out.println(">> Texture height: " + texture.getTextureHeight());
-            System.out.println(">> Texture ID: " + texture.getTextureID());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Texture loaded: " + texture);
+        System.out.println(">> Image width: " + texture.getImageWidth());
+        System.out.println(">> Image height: " + texture.getImageHeight());
+        System.out.println(">> Texture width: " + texture.getTextureWidth());
+        System.out.println(">> Texture height: " + texture.getTextureHeight());
+        System.out.println(">> Texture ID: " + texture.getTextureID());
     }
 
     //
@@ -472,7 +462,7 @@ public class Testing {
     //
     // Main Class
     //
-    public static void display() {
+    public static void display() throws LWJGLException, IOException {
         new Testing().start();
     }
 }

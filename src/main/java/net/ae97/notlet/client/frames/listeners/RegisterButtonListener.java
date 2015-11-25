@@ -27,8 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.ae97.notlet.client.ClientCore;
 import net.ae97.notlet.client.frames.LoginFrame;
 import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.Packet;
@@ -61,7 +61,8 @@ public class RegisterButtonListener implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Registration Failed");
             }
         } catch (IOException ex) {
-            Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
+            ClientCore.getLogger().log(Level.SEVERE, "Error registering", ex);
+            JOptionPane.showMessageDialog(null, "Registration Failed: " + ex.getMessage());
         }
     }
 

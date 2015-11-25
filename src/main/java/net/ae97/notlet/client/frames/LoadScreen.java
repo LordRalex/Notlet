@@ -25,10 +25,12 @@ package net.ae97.notlet.client.frames;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.io.IOException;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import net.ae97.notlet.client.ClientCore;
 import net.ae97.notlet.client.Testing;
 import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.StartGamePacket;
@@ -63,9 +65,9 @@ public class LoadScreen extends JFrame {
                 connection.sendPacket(startGamePacket);
                 dispose();
                 Testing.display();
-            } catch (InterruptedException | IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            } catch (Exception ex) {
+                ClientCore.getLogger().log(Level.SEVERE, "Error on starting game", ex);
+                JOptionPane.showMessageDialog(null, "Error on starting: " + ex.getMessage());
             }
         }).start();
     }

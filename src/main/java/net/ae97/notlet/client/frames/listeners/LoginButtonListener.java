@@ -27,8 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.ae97.notlet.client.ClientCore;
 import net.ae97.notlet.client.frames.LoadScreen;
 import net.ae97.notlet.client.frames.LoginFrame;
 import net.ae97.notlet.client.network.ServerConnection;
@@ -59,9 +59,6 @@ public class LoginButtonListener implements ActionListener {
             JOptionPane.showMessageDialog(null, "Please enter a seed");
         }
 
-        //TODO: Needs to be rewritten so that the socket is kept open
-        //probably will need to make this entire process spawn elsewhere
-        //maybe look at Client in general
         try {
             ServerConnection socket = ServerConnection.open();
             socket.sendPacket(new LoginPacket(username, password));
@@ -74,9 +71,9 @@ public class LoginButtonListener implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Login Failed");
             }
         } catch (IOException ex) {
-            Logger.getLogger(LoginButtonListener.class.getName()).log(Level.SEVERE, null, ex);
+            ClientCore.getLogger().log(Level.SEVERE, "Error talking to server", ex);
+            JOptionPane.showMessageDialog(null, "An error occurred while trying to talk to server: " + ex.getMessage());
         }
-
     }
 
 }

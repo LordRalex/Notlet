@@ -27,15 +27,13 @@
             <version>2.9.3</version>
         </dependency>
         <dependency>
-            <groupId>slick-util</groupId>
-            <artifactId>slick-util</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/slick-util.jar</systemPath>
+            <groupId>org.slick2d</groupId>
+            <artifactId>slick2d-basic-game-archetype</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.slick2d</groupId>
-            <artifactId>slick2d-basic-game-archetype</artifactId>
+            <artifactId>slick2d-core</artifactId>
             <version>1.0.1</version>
         </dependency>
     </dependencies>
