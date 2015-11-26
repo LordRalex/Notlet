@@ -23,22 +23,26 @@
  */
 package net.ae97.notlet.network.packets;
 
-public enum PacketType {
+public class EntityDamagePacket extends Packet {
 
-    Login,
-    Success,
-    Error,
-    StartGame,
-    EndGame,
-    Register,
-    MoveRequest,
-    AttackRequest,
-    EntityLocationUpdate,
-    EntityAttack,
-    EntityDeath,
-    EntitySpawn,
-    StartLevel,
-    EndLevel,
-    EntityDamage
+    private final int entityId, damage;
+
+    public EntityDamagePacket(int entityId, int damageAmount) {
+        this.entityId = entityId;
+        this.damage = damageAmount;
+    }
+
+    @Override
+    public PacketType getType() {
+        return PacketType.EntityDamage;
+    }
+
+    public int getEntityId() {
+        return entityId;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
 
 }

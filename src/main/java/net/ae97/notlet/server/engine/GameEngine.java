@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import net.ae97.notlet.GlobalIdentification;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.logging.LoggerFactory;
@@ -41,7 +42,7 @@ import net.ae97.notlet.server.level.Level;
 public class GameEngine implements Runnable {
 
     //Indicates which game number is the newest
-    private static final EngineCounter engineCounter = new EngineCounter();
+    private static final GlobalIdentification engineCounter = new GlobalIdentification();
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger;
     private final int threadId;
@@ -54,7 +55,7 @@ public class GameEngine implements Runnable {
 
     public GameEngine(Client client, String seed) {
         this.client = client;
-        threadId = engineCounter.increment();
+        threadId = engineCounter.next();
         logger = LoggerFactory.create("Engine-" + threadId);
         if (seed == null || seed.isEmpty()) {
             isSingleLevel = false;
@@ -130,16 +131,4 @@ public class GameEngine implements Runnable {
             logger.log(java.util.logging.Level.SEVERE, "Error on sending packet", ex);
         }
     }
-
-    private final static class EngineCounter {
-
-        private int counter;
-
-        public synchronized int increment() {
-            counter++;
-            return counter;
-        }
-
-    }
-
 }

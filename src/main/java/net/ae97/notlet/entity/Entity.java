@@ -24,6 +24,7 @@
 package net.ae97.notlet.entity;
 
 import java.io.Serializable;
+import net.ae97.notlet.GlobalIdentification;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.server.level.Level;
 
@@ -32,6 +33,8 @@ import net.ae97.notlet.server.level.Level;
  */
 public abstract class Entity implements Serializable {
 
+    private static final GlobalIdentification tracker = new GlobalIdentification();
+    private final int entityId;
     private Location location;
     private int hp;
     private int value;
@@ -39,6 +42,7 @@ public abstract class Entity implements Serializable {
     private double movementSpeed = 0;
 
     public Entity(Location loc, int hp, int value, String sprite, double movementSpeed) {
+        this.entityId = tracker.next();
         this.location = loc;
         this.hp = hp;
         this.value = value;
@@ -47,6 +51,10 @@ public abstract class Entity implements Serializable {
     }
 
     public abstract void processTick(Level level);
+
+    public int getId() {
+        return entityId;
+    }
 
     public void damage(int damage) {
         hp -= damage;
