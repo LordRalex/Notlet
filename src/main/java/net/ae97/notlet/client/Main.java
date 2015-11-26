@@ -55,6 +55,7 @@ public class Main {
         frame.setVisible(true);
         if (Files.exists(Paths.get("natives"))) {
             ClientCore.getLogger().warning("Natives folder exists, assuming extracted");
+            frame.dispose();
             return;
         }
         Files.createDirectory(Paths.get("natives"));
