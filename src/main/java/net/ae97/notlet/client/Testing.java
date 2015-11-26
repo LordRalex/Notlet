@@ -332,18 +332,7 @@ public class Testing {
         initGL(800, 600);
         init();
 
-        while (true) {
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-            render();
-
-            Display.update();
-            Display.sync(100);
-
-            if (Display.isCloseRequested()) {
-                Display.destroy();
-                System.exit(0);
-            }
-        }
+        render();
     }
 
     //
@@ -396,6 +385,7 @@ public class Testing {
     //
     public void render() {
         Color.white.bind();
+        Display.sync(60);
         texture.bind(); // or GL11.glBind(texture.getTextureID());
         //dirt_Texture.bind();
         while (!Display.isCloseRequested()) {
@@ -405,8 +395,7 @@ public class Testing {
             pollInput();
             renderGL();
 
-            Display.update();
-            Display.sync(60);
+            Display.update();            
 
         }
     }

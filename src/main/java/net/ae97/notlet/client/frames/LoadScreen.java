@@ -23,6 +23,7 @@
  */
 package net.ae97.notlet.client.frames;
 
+import net.ae97.notlet.client.Testing;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.logging.Level;
@@ -31,7 +32,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import net.ae97.notlet.client.ClientCore;
-import net.ae97.notlet.client.Testing;
 import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.StartGamePacket;
 
