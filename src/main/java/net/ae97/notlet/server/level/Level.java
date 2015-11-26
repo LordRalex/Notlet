@@ -166,7 +166,7 @@ public class Level {
                 }
             }
         } else {
-            while (i >= 0 && j < map.length) {
+            while (j < map.length && i >= 0) {
                 if (rng.nextBoolean()) {
                     map[i][j] = true;
                     i--;
