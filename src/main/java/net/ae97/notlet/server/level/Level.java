@@ -95,6 +95,22 @@ public class Level {
         }
         fill(rng);
         populate(rng);
+        System.out.println("Level Generation Complete!!!");
+
+        /*Code for Printing Out maps
+        **Testing Only
+        for (int k = 0; k < map.length; k++) {
+            for (int f = 0; f < map.length; f++) {
+                if (map[f][k]) {
+                    System.out.print(" ");
+                }
+                else {
+                    System.out.print("x");
+                }
+            }
+            System.out.println();
+        }
+        */
     }
 
     public boolean[][] getMap() {
@@ -143,7 +159,7 @@ public class Level {
         int j = 0;
 
         while (i < map.length && j < map.length) {
-            if (i > map.length && map[i + 1][j]) {
+            if (i+1 < map.length) {
                 i++;
             } else {
                 j++;
@@ -156,25 +172,21 @@ public class Level {
 
     private void branch(Random rng, int i, int j) {
         if (rng.nextBoolean()) {
-            while (i < map.length && j >= 0) {
+            while (i < map.length && i >= 0 && j < map.length && j >= 0) {
                 if (rng.nextBoolean()) {
-                    System.out.println("true if " + i + " " + j);
                     map[i][j] = true;
                     i++;
                 } else {
-                    System.out.println("true else " + i + " " + j);
                     map[i][j] = true;
                     j--;
                 }
             }
         } else {
-            while (j < map.length && i >= 0) {
+            while (j < map.length && j >= 0 && i < map.length && i >= 0) {
                 if (rng.nextBoolean()) {
-                    System.out.println("false if " + i + " " + j);
                     map[i][j] = true;
                     i--;
                 } else {
-                    System.out.println("false else " + i + " " + j);
                     map[i][j] = true;
                     j++;
                 }
