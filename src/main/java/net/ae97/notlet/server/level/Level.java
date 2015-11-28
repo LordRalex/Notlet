@@ -158,9 +158,11 @@ public class Level {
         if (rng.nextBoolean()) {
             while (i < map.length && j >= 0) {
                 if (rng.nextBoolean()) {
+                    System.out.println("true if " + i + " " + j);
                     map[i][j] = true;
                     i++;
                 } else {
+                    System.out.println("true else " + i + " " + j);
                     map[i][j] = true;
                     j--;
                 }
@@ -168,9 +170,11 @@ public class Level {
         } else {
             while (j < map.length && i >= 0) {
                 if (rng.nextBoolean()) {
+                    System.out.println("false if " + i + " " + j);
                     map[i][j] = true;
                     i--;
                 } else {
+                    System.out.println("false else " + i + " " + j);
                     map[i][j] = true;
                     j++;
                 }
