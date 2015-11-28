@@ -95,22 +95,6 @@ public class Level {
         }
         fill(rng);
         populate(rng);
-        System.out.println("Level Generation Complete!!!");
-
-        /*Code for Printing Out maps
-         **Testing Only
-         for (int k = 0; k < map.length; k++) {
-         for (int f = 0; f < map.length; f++) {
-         if (map[f][k]) {
-         System.out.print(" ");
-         }
-         else {
-         System.out.print("x");
-         }
-         }
-         System.out.println();
-         }
-         */
     }
 
     public boolean[][] getMap() {
@@ -151,7 +135,7 @@ public class Level {
     }
 
     public Player getPlayer() {
-        return (Player) entities.stream().filter((e) -> (e instanceof Player)).findFirst().orElse(null);
+        return (Player) entities.stream().filter((e) -> (e instanceof Player)).findFirst().get();
     }
 
     private void fill(Random rng) {

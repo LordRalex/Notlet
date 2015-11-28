@@ -34,6 +34,7 @@ import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.logging.LoggerFactory;
 import net.ae97.notlet.network.packets.EndGamePacket;
 import net.ae97.notlet.network.packets.EndLevelPacket;
+import net.ae97.notlet.network.packets.EntityLocationUpdatePacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
 import net.ae97.notlet.server.level.Level;
@@ -63,6 +64,8 @@ public class GameEngine implements Runnable {
             isSingleLevel = true;
             level = new Level(seed.hashCode());
         }
+        player = new Player(new Location(0, 0));
+        level.spawnEntity(player);
     }
 
     /**
@@ -73,6 +76,7 @@ public class GameEngine implements Runnable {
         endPoint = new Location(level.getSize(), level.getSize());
         client.sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
         executor.scheduleAtFixedRate(this, 0, 25, TimeUnit.MILLISECONDS);
+        logger.info("Started");
     }
 
     /**
@@ -81,8 +85,15 @@ public class GameEngine implements Runnable {
     @Override
     public void run() {
         tickCount++;
+        if (tickCount % 40 == 0) {
+            logger.info("Tick counter: " + tickCount);
+        }
         level.getEntities().stream().forEach((entity) -> {
+            Location previous = entity.getLocation();
             entity.processTick(level);
+            if (!previous.equals(entity.getLocation())) {
+                sendPacket(new EntityLocationUpdatePacket(entity.getId(), entity.getLocation()));
+            }
         });
         level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
             if (!(en instanceof Player)) {
@@ -93,6 +104,7 @@ public class GameEngine implements Runnable {
         if (player.getHp() <= 0) {
             sendPacket(new EndGamePacket(player.getScore()));
             stop();
+
             return;
         }
         level.processTick();
@@ -101,11 +113,12 @@ public class GameEngine implements Runnable {
             if (isSingleLevel) {
                 sendPacket(new EndGamePacket(player.getScore()));
                 stop();
-                return;
             } else {
                 level = new Level();
                 level.generate();
                 endPoint = new Location(level.getSize(), level.getSize());
+                player.setLocation(new Location(0, 0));
+                level.spawnEntity(player);
                 sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
             }
         }
@@ -116,7 +129,6 @@ public class GameEngine implements Runnable {
      */
     public void stop() {
         logger.info("Stopping");
-        sendPacket(new EndGamePacket(0));
         synchronized (client) {
             client.interrupt();
         }

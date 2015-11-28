@@ -25,12 +25,12 @@ package net.ae97.notlet.network.packets;
 
 import net.ae97.notlet.Location;
 
-public class EntityLocationUpdate extends Packet {
+public class EntityLocationUpdatePacket extends Packet {
 
     private final int entityId;
     private final Location location;
 
-    public EntityLocationUpdate(int entityId, Location location) {
+    public EntityLocationUpdatePacket(int entityId, Location location) {
         this.entityId = entityId;
         this.location = location;
     }

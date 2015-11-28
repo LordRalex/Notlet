@@ -58,6 +58,13 @@ public class GameInstance {
         }
     }
 
+    public static void updateEntityLocation(int entityId, Location location) {
+        synchronized (entities) {
+            Entity entity = entities.stream().filter((en) -> en.getId() == entityId).findFirst().get();
+            entity.setLocation(location);
+        }
+    }
+
     public static void removeEntity(int entityId) {
         synchronized (entities) {
             entities.removeIf((en) -> en.getId() == entityId);
