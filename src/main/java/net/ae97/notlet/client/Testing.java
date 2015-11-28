@@ -320,7 +320,13 @@ public class Testing {
 
     // The texture that will hold the image details //
     private Texture texture;
+    private Texture textureU;
+    private Texture textureD;
+    private Texture textureL;
+    private Texture textureR;
     //private Texture dirt_Texture;
+
+    final int SpriteScaleFactor = 4;
 
     int x = 0;
     int y = 0;
@@ -329,7 +335,7 @@ public class Testing {
     // Start the example
     //
     public void start() throws LWJGLException, IOException {
-        initGL(800, 600);
+        initGL(800,600);
         init();
 
         render();
@@ -369,14 +375,18 @@ public class Testing {
     public void init() throws IOException {
 
         // load texture from PNG file
-        texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("image.png"));
+        texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
+        textureU = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png"));
+        textureD = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
+        textureL = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerL.png"));
+        textureR = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerR.png"));
         //dirt_Texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png"));
 
         System.out.println("Texture loaded: " + texture);
-        System.out.println(">> Image width: " + texture.getImageWidth());
-        System.out.println(">> Image height: " + texture.getImageHeight());
-        System.out.println(">> Texture width: " + texture.getTextureWidth());
-        System.out.println(">> Texture height: " + texture.getTextureHeight());
+        System.out.println(">> Image width: " + texture.getImageWidth()*SpriteScaleFactor);
+        System.out.println(">> Image height: " + texture.getImageHeight()*SpriteScaleFactor);
+        System.out.println(">> Texture width: " + texture.getTextureWidth()*SpriteScaleFactor);
+        System.out.println(">> Texture height: " + texture.getTextureHeight()*SpriteScaleFactor);
         System.out.println(">> Texture ID: " + texture.getTextureID());
     }
 
@@ -404,15 +414,19 @@ public class Testing {
 
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             x -= 16;
+            textureL.bind();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             x += 16;
+            textureR.bind();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             y -= 16;
+            textureU.bind();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             y += 16;
+            textureD.bind();
         }
 
         // keep quad on the screen
@@ -438,11 +452,11 @@ public class Testing {
         GL11.glTexCoord2f(0, 0);
         GL11.glVertex2f(x, y);
         GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(x + texture.getTextureWidth(), y);
+        GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(x + texture.getTextureWidth(), y + texture.getTextureHeight());
+        GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y + texture.getTextureHeight()*4);
         GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(x, y + texture.getTextureHeight());
+        GL11.glVertex2f(x, y + texture.getTextureHeight()*SpriteScaleFactor);
         GL11.glEnd();
         //GL11.glPopMatrix();
 
