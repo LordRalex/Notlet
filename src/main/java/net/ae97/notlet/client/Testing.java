@@ -308,9 +308,11 @@ package net.ae97.notlet.client;
 import java.io.IOException;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opencl.api.Filter;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -326,7 +328,7 @@ public class Testing {
     private Texture textureR;
     //private Texture dirt_Texture;
 
-    final int SpriteScaleFactor = 4;
+    final int SpriteScaleFactor = 1;
 
     int x = 0;
     int y = 0;
@@ -433,14 +435,14 @@ public class Testing {
         if (x < 0) {
             x = 0;
         }
-        if (x > 734) {
-            x = 734;
+        if (x > 766) {
+            x = 766;
         }
         if (y < 0) {
             y = 0;
         }
-        if (y > 530) {
-            y = 530;
+        if (y > 562) {
+            y = 562;
         }
 
     }
@@ -454,7 +456,7 @@ public class Testing {
         GL11.glTexCoord2f(1, 0);
         GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y + texture.getTextureHeight()*4);
+        GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y + texture.getTextureHeight()*SpriteScaleFactor);
         GL11.glTexCoord2f(0, 1);
         GL11.glVertex2f(x, y + texture.getTextureHeight()*SpriteScaleFactor);
         GL11.glEnd();
