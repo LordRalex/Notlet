@@ -34,6 +34,7 @@ import net.ae97.notlet.server.level.Level;
 public abstract class Entity implements Serializable {
 
     private static final GlobalIdentification tracker = new GlobalIdentification();
+    private final int size = 32;
     private final int entityId;
     private Location location;
     private int hp;
@@ -79,22 +80,6 @@ public abstract class Entity implements Serializable {
         return sprite;
     }
 
-    public final double distanceSquaredFrom(Location target) {
-        return Math.pow(location.getX() - target.getX(), 2) + Math.pow(location.getY() - target.getY(), 2);
-    }
-
-    public boolean hasCollidedWith(Entity en) {
-        return false;
-    }
-
-    public boolean isAt(Location loc) {
-        return false;
-    }
-
-    public boolean canSee(Location location) {
-        return false;
-    }
-
     public double getMovementSpeed() {
         return movementSpeed;
     }
@@ -109,5 +94,33 @@ public abstract class Entity implements Serializable {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public boolean hasCollidedWith(Entity en) {
+        double x1 = en.getLocation().getX();
+        double x2 = en.getLocation().getX() + size;
+        double y1 = en.getLocation().getY();
+        double y2 = en.getLocation().getY() + size;
+
+        Location loc1 = new Location(x1, y1);
+        Location loc2 = new Location(x1, y2);
+        Location loc3 = new Location(x2, y1);
+        Location loc4 = new Location(x2, y2);
+
+        return isAt(loc1) || isAt(loc2) || isAt(loc3) || isAt(loc4);
+    }
+
+    public boolean isAt(Location loc) {
+        double x1 = getLocation().getX();
+        double x2 = getLocation().getX() + size;
+        double y1 = getLocation().getY();
+        double y2 = getLocation().getY() + size;
+
+        return (x1 <= loc.getX() && x2 >= loc.getX() && y1 <= loc.getY() && y2 >= loc.getY());
+    }
+
+    public boolean canSee(Location location) {
+        //TODO: Implement later
+        return true;
     }
 }

@@ -38,7 +38,7 @@ public class Location implements Serializable {
         this.y = 0;
     }
 
-    public Location(int x, int y) {
+    public Location(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -53,6 +53,14 @@ public class Location implements Serializable {
 
     public boolean isEqual(Location obj) {
         return (obj.x == this.x && obj.y == this.y);
+    }
+
+    public static double distanceSquaredFrom(Location loc1, Location loc2) {
+        return Math.pow(loc1.getX() - loc2.getX(), 2) + Math.pow(loc1.getY() - loc2.getY(), 2);
+    }
+
+    public double distanceSquared(Location loc2) {
+        return Location.distanceSquaredFrom(this, loc2);
     }
 
 }
