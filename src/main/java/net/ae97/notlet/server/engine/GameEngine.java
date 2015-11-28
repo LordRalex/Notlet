@@ -88,39 +88,43 @@ public class GameEngine implements Runnable {
         if (tickCount % 40 == 0) {
             logger.info("Tick counter: " + tickCount);
         }
-        level.getEntities().stream().forEach((entity) -> {
-            Location previous = entity.getLocation();
-            entity.processTick(level);
-            if (!previous.equals(entity.getLocation())) {
-                sendPacket(new EntityLocationUpdatePacket(entity.getId(), entity.getLocation()));
-            }
-        });
-        level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
-            if (!(en instanceof Player)) {
-                return;
-            }
-            player.addScore(en.getValue());
-        });
-        if (player.getHp() <= 0) {
-            sendPacket(new EndGamePacket(player.getScore()));
-            stop();
-
-            return;
-        }
-        level.processTick();
-        if (player.isAt(endPoint)) {
-            sendPacket(new EndLevelPacket());
-            if (isSingleLevel) {
+        try {
+            level.getEntities().stream().forEach((entity) -> {
+                Location previous = entity.getLocation();
+                entity.processTick(level);
+                if (!previous.equals(entity.getLocation())) {
+                    sendPacket(new EntityLocationUpdatePacket(entity.getId(), entity.getLocation()));
+                }
+            });
+            level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
+                if (!(en instanceof Player)) {
+                    return;
+                }
+                player.addScore(en.getValue());
+            });
+            if (player.getHp() <= 0) {
                 sendPacket(new EndGamePacket(player.getScore()));
                 stop();
-            } else {
-                level = new Level();
-                level.generate();
-                endPoint = new Location(level.getSize(), level.getSize());
-                player.setLocation(new Location(0, 0));
-                level.spawnEntity(player);
-                sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
+
+                return;
             }
+            level.processTick();
+            if (player.isAt(endPoint)) {
+                sendPacket(new EndLevelPacket());
+                if (isSingleLevel) {
+                    sendPacket(new EndGamePacket(player.getScore()));
+                    stop();
+                } else {
+                    level = new Level();
+                    level.generate();
+                    endPoint = new Location(level.getSize(), level.getSize());
+                    player.setLocation(new Location(0, 0));
+                    level.spawnEntity(player);
+                    sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
+                }
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error on handling tick", ex);
         }
     }
 
