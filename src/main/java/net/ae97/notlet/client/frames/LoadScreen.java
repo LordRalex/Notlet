@@ -25,7 +25,9 @@ package net.ae97.notlet.client.frames;
 
 import net.ae97.notlet.client.Testing;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -49,10 +51,13 @@ public class LoadScreen extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setUndecorated(true);
         setVisible(true);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); 
         setLayout(new BorderLayout());
         setContentPane(new JLabel(new ImageIcon(getClass().getResource("/BIGLET.png"))));
         setLayout(new FlowLayout());
         repaint();
+        
     }
 
     public void start() {
