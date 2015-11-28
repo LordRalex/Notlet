@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 AE97
+ * Copyright 2015 Joshua.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,38 @@
  */
 package net.ae97.notlet.entity;
 
+import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.server.level.Level;
 
-/**
- * Created by john on 11/22/15.
- */
-public abstract class Monster extends Entity {
+public class Arrow extends Entity {
 
-    private boolean isAggro = false;
-    private Location targetLocation;
+    private final Direction direction;
 
-    public Monster(Location loc, int hp, int value, String sprite, double movementSpeed) {
-        super(loc, hp, value, sprite, movementSpeed, 32);
+    public Arrow(Location loc, int hp, Direction direction) {
+        super(loc, hp, 0, "arrow", 0.07, 32);
+        this.direction = direction;
     }
 
     @Override
     public void processTick(Level level) {
-        
-    }
-
-    public Location getTargetLocation() {
-        return targetLocation;
-    }
-
-    public void setTargetLocation(Location location) {
-        targetLocation = location;
-    }
-
-    public void setAggro(boolean newVal) {
-        isAggro = newVal;
-    }
-
-    public boolean isAggro() {
-        return isAggro;
+        Location old = getLocation();
+        Location newLocation = old;
+        switch (direction) {
+            case LEFT:
+                newLocation = new Location(old.getX() - 16, old.getY());
+                break;
+            case RIGHT:
+                newLocation = new Location(old.getX() + 16, old.getY());
+                break;
+            case UP:
+                newLocation = new Location(old.getX() - 16, old.getY());
+                break;
+            case DOWN:
+                newLocation = new Location(old.getX() - 16, old.getY());
+                break;
+        }
+        setLocation(newLocation);
     }
 
 }

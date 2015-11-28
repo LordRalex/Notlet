@@ -40,7 +40,7 @@ public class Player extends Entity {
     private int attackCooldown;
 
     public Player(Location loc) {
-        super(loc, 100, 200, "rangerD", 0.05);
+        super(loc, 100, 200, "rangerD", 0.05, 32);
     }
 
     @Override
