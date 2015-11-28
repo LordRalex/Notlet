@@ -64,7 +64,7 @@ public class Main {
             return;
         }
 
-        System.setProperty("javax.net.ssl.keyStore", config.getString("certificate.file", "server.jks"));
+        System.setProperty("javax.net.ssl.keyStore", config.getString("certificate.file", "keystore.jks"));
         System.setProperty("javax.net.ssl.keyStorePassword", config.getString("certificate.pass", "notlet"));
 
         String bindHost = config.getString("bind.host", "0.0.0.0");

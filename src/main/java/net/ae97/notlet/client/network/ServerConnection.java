@@ -24,21 +24,55 @@
 package net.ae97.notlet.client.network;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import javax.net.SocketFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 import net.ae97.notlet.network.packets.Packet;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class ServerConnection implements AutoCloseable {
 
-    private static SocketFactory socketFactory = SocketFactory.getDefault();
+    static {
+        try {
+            InputStream fis = ResourceLoader.getResourceAsStream("notlet.cer");
+            X509Certificate ca;
+            ca = (X509Certificate) CertificateFactory.getInstance("X.509")
+                    .generateCertificate(fis);
+            KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+            ks.load(null, null);
+            ks.setCertificateEntry(Integer.toString(1), ca);
+
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(ks);
+
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, tmf.getTrustManagers(), null);
+            socketFactory = context.getSocketFactory();
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
+            throw new RuntimeException("Could not import notlet.cer", ex);
+        }
+    }
+
+    private static final SocketFactory socketFactory;
     private final Socket socket;
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
 
     private ServerConnection() throws IOException {
         socket = socketFactory.createSocket("notlet.ae97.net", 9687);
+        ((SSLSocket) socket).setEnabledCipherSuites(new String[]{"TLS_DHE_RSA_WITH_AES_128_CBC_SHA256"});
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
     }

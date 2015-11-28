@@ -25,10 +25,10 @@ package net.ae97.notlet.server.engine;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
-import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import net.ae97.notlet.server.ServerCore;
 
 public class ConnectionEngine extends Thread {
@@ -45,7 +45,8 @@ public class ConnectionEngine extends Thread {
     @Override
     public void run() {
         ServerCore.getLogger().log(Level.INFO, "Starting server on " + host + ":" + port);
-        try (ServerSocket server = ServerSocketFactory.getDefault().createServerSocket(port, 5, InetAddress.getByName(host))) {
+        try (SSLServerSocket server = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port, 5, InetAddress.getByName(host))) {
+            server.setEnabledCipherSuites(new String[]{"TLS_DHE_RSA_WITH_AES_128_CBC_SHA256"});
             try {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
