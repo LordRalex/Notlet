@@ -24,7 +24,9 @@
 package net.ae97.notlet.client.network;
 
 import java.io.IOException;
+import net.ae97.notlet.client.GameInstance;
 import net.ae97.notlet.network.packets.Packet;
+import net.ae97.notlet.network.packets.StartLevelPacket;
 
 public class GameProcessor extends Thread {
 
@@ -40,6 +42,19 @@ public class GameProcessor extends Thread {
         try {
             while (!connection.isClosed() && !this.isInterrupted()) {
                 Packet next = connection.readPacket();
+                switch (next.getType()) {
+                    case EndGame: {
+                        interrupt();
+                    }
+                    break;
+                    case EndLevel: {
+                    }
+                    case StartLevel: {
+                        StartLevelPacket packet = (StartLevelPacket) next;
+                        GameInstance.init(packet.getMap(), packet.getEntities());
+                    }
+                    break;
+                }
             }
         } catch (IOException ex) {
 

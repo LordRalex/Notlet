@@ -98,19 +98,19 @@ public class Level {
         System.out.println("Level Generation Complete!!!");
 
         /*Code for Printing Out maps
-        **Testing Only
-        for (int k = 0; k < map.length; k++) {
-            for (int f = 0; f < map.length; f++) {
-                if (map[f][k]) {
-                    System.out.print(" ");
-                }
-                else {
-                    System.out.print("x");
-                }
-            }
-            System.out.println();
-        }
-        */
+         **Testing Only
+         for (int k = 0; k < map.length; k++) {
+         for (int f = 0; f < map.length; f++) {
+         if (map[f][k]) {
+         System.out.print(" ");
+         }
+         else {
+         System.out.print("x");
+         }
+         }
+         System.out.println();
+         }
+         */
     }
 
     public boolean[][] getMap() {
@@ -159,7 +159,7 @@ public class Level {
         int j = 0;
 
         while (i < map.length && j < map.length) {
-            if (i+1 < map.length) {
+            if (i + 1 < map.length) {
                 i++;
             } else {
                 j++;

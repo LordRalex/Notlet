@@ -28,7 +28,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import net.ae97.notlet.server.CoreServer;
+import net.ae97.notlet.server.ServerCore;
 import net.ae97.notlet.server.crypto.HashGenerator;
 import net.ae97.notlet.server.database.Database;
 
@@ -57,7 +57,7 @@ public class AuthenticationEngine {
                 }
             }
         } catch (SQLException ex) {
-            CoreServer.getLogger().log(Level.SEVERE, "Error on database connection", ex);
+            ServerCore.getLogger().log(Level.SEVERE, "Error on database connection", ex);
             return false;
         }
     }

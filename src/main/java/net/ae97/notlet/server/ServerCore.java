@@ -23,34 +23,21 @@
  */
 package net.ae97.notlet.server;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 import net.ae97.notlet.logging.LoggerFactory;
 import net.ae97.notlet.server.engine.ConnectionEngine;
-import net.ae97.notlet.server.engine.GameEngine;
 
-public class CoreServer {
+public class ServerCore {
 
     private static final Logger logger = LoggerFactory.create("Core");
     private final ConnectionEngine connectionEngine;
-    private final List<GameEngine> games;
 
-    public CoreServer(String host, int port) {
+    public ServerCore(String host, int port) {
         connectionEngine = new ConnectionEngine(host, port);
-        games = new LinkedList<>();
     }
 
     public void start() {
         connectionEngine.start();
-    }
-
-    public void startGame() {
-
-    }
-
-    public List<GameEngine> getGames() {
-        return games;
     }
 
     public static Logger getLogger() {

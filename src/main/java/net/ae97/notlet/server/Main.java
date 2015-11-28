@@ -60,13 +60,16 @@ public class Main {
         try {
             Database.openConnection();
         } catch (SQLException ex) {
-            CoreServer.getLogger().log(Level.SEVERE, "Could not connect to database", ex);
+            ServerCore.getLogger().log(Level.SEVERE, "Could not connect to database", ex);
             return;
         }
 
+        System.setProperty("javax.net.ssl.keyStore", config.getString("certificate.file", "server.jks"));
+        System.setProperty("javax.net.ssl.keyStorePassword", config.getString("certificate.pass", "notlet"));
+
         String bindHost = config.getString("bind.host", "0.0.0.0");
         int bindPort = config.getInt("bind.port", 9687);
-        CoreServer server = new CoreServer(bindHost, bindPort);
+        ServerCore server = new ServerCore(bindHost, bindPort);
 
         server.start();
     }

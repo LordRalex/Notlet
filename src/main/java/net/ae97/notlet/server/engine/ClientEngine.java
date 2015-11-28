@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.ae97.notlet.server;
+package net.ae97.notlet.server.engine;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -37,17 +37,16 @@ import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.RegisterPacket;
 import net.ae97.notlet.network.packets.StartGamePacket;
 import net.ae97.notlet.network.packets.SuccessPacket;
-import net.ae97.notlet.server.engine.AuthenticationEngine;
-import net.ae97.notlet.server.engine.GameEngine;
+import net.ae97.notlet.server.ServerCore;
 
-public class Client extends Thread {
+public class ClientEngine extends Thread {
 
     private final Socket socket;
     private State state = State.Login;
     private ObjectOutputStream out;
     private GameEngine game;
 
-    public Client(Socket socket) {
+    public ClientEngine(Socket socket) {
         this.socket = socket;
     }
 
@@ -58,7 +57,7 @@ public class Client extends Thread {
             try (ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream())) {
                 this.out = o;
                 try (ObjectInputStream in = new ObjectInputStream(connection.getInputStream())) {
-                    while (isAlive) {
+                    while (isAlive && !interrupted()) {
                         try {
                             Packet next = (Packet) in.readObject();
                             switch (next.getType()) {
@@ -110,7 +109,7 @@ public class Client extends Thread {
                         } catch (EOFException | SocketException ex) {
                             isAlive = false;
                         } catch (Exception ex) {
-                            CoreServer.getLogger().log(Level.SEVERE, "Error handling client packet", ex);
+                            ServerCore.getLogger().log(Level.SEVERE, "Error handling client packet", ex);
                             //handling packet failed, assuming that we can still run though
                             //however, if any of the sockets are closed, we need to terminate
                             if (socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed()) {
@@ -123,11 +122,11 @@ public class Client extends Thread {
         } catch (IOException ex) {
             getLogger().log(Level.SEVERE, "Error on client connection", ex);
         } finally {
-            out = null;
             if (game != null) {
                 game.stop();
                 game = null;
             }
+            out = null;
         }
     }
 
@@ -136,7 +135,7 @@ public class Client extends Thread {
     }
 
     public Logger getLogger() {
-        return CoreServer.getLogger();
+        return ServerCore.getLogger();
     }
 
     private enum State {

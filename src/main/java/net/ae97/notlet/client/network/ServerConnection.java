@@ -32,14 +32,15 @@ import net.ae97.notlet.network.packets.Packet;
 
 public class ServerConnection implements AutoCloseable {
 
+    private static SocketFactory socketFactory = SocketFactory.getDefault();
     private final Socket socket;
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
 
     private ServerConnection() throws IOException {
-        socket = SocketFactory.getDefault().createSocket("notlet.ae97.net", 9687);
+        socket = socketFactory.createSocket("notlet.ae97.net", 9687);
         out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());        
+        in = new ObjectInputStream(socket.getInputStream());
     }
 
     public static ServerConnection open() throws IOException {

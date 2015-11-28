@@ -36,7 +36,6 @@ import net.ae97.notlet.network.packets.EndGamePacket;
 import net.ae97.notlet.network.packets.EndLevelPacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
-import net.ae97.notlet.server.Client;
 import net.ae97.notlet.server.level.Level;
 
 public class GameEngine implements Runnable {
@@ -48,12 +47,12 @@ public class GameEngine implements Runnable {
     private final int threadId;
     private Level level;
     private final boolean isSingleLevel;
-    private final Client client;
+    private final ClientEngine client;
     private Player player;
     private Location endPoint;
     private int tickCount = 0;
 
-    public GameEngine(Client client, String seed) {
+    public GameEngine(ClientEngine client, String seed) {
         this.client = client;
         threadId = engineCounter.next();
         logger = LoggerFactory.create("Engine-" + threadId);
@@ -117,6 +116,10 @@ public class GameEngine implements Runnable {
      */
     public void stop() {
         logger.info("Stopping");
+        sendPacket(new EndGamePacket(0));
+        synchronized (client) {
+            client.interrupt();
+        }
         executor.shutdown();
     }
 

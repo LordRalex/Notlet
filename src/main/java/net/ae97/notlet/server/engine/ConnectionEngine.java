@@ -29,8 +29,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import javax.net.ServerSocketFactory;
-import net.ae97.notlet.server.Client;
-import net.ae97.notlet.server.CoreServer;
+import net.ae97.notlet.server.ServerCore;
 
 public class ConnectionEngine extends Thread {
 
@@ -45,21 +44,21 @@ public class ConnectionEngine extends Thread {
 
     @Override
     public void run() {
-        CoreServer.getLogger().log(Level.INFO, "Starting server on " + host + ":" + port);
+        ServerCore.getLogger().log(Level.INFO, "Starting server on " + host + ":" + port);
         try (ServerSocket server = ServerSocketFactory.getDefault().createServerSocket(port, 5, InetAddress.getByName(host))) {
             try {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
-                    CoreServer.getLogger().log(Level.INFO, "Client connection [" + socket.getRemoteSocketAddress() + "]");
-                    Client client = new Client(socket);
+                    ServerCore.getLogger().log(Level.INFO, "Client connection [" + socket.getRemoteSocketAddress() + "]");
+                    ClientEngine client = new ClientEngine(socket);
                     client.start();
                 }
 
             } catch (IOException ex) {
-                CoreServer.getLogger().log(Level.SEVERE, "Error on client creation", ex);
+                ServerCore.getLogger().log(Level.SEVERE, "Error on client creation", ex);
             }
         } catch (Exception ex) {
-            CoreServer.getLogger().log(Level.SEVERE, "Error on server creation", ex);
+            ServerCore.getLogger().log(Level.SEVERE, "Error on server creation", ex);
         }
     }
 
