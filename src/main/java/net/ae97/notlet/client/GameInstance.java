@@ -78,6 +78,9 @@ public class GameInstance {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         try {
+            textureMapping.put("SMALLLET", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("SMALLLET.png")));
+            textureMapping.put("healthbar", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("healthbar.png")));
+            textureMapping.put("score", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("score.png")));
             textureMapping.put("arrow", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("arrow.png")));
             textureMapping.put("dirt", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png")));
             textureMapping.put("rangerD", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png")));
@@ -169,11 +172,52 @@ public class GameInstance {
         synchronized (entities) {
             Player player = getPlayer();
             renderBackground(player.getLocation());
+            renderHUD(player);
             renderExit(player.getLocation());
             entities.forEach((en) -> renderEntity(en, player.getLocation()));
         }
 
         pollInput();
+    }
+
+    private static void renderHUD(Player player){
+
+        textureMapping.get("SMALLLET").bind();
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(200, 609);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(400, 609);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(400, 649);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(200, 649);
+        GL11.glEnd();
+
+        textureMapping.get("healthbar").bind();
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(20, 610);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(60, 610);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(60, 630);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(20, 630);
+        GL11.glEnd();
+
+        textureMapping.get("score").bind();
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(20, 630);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(60, 630);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(60, 650);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(20, 650);
+        GL11.glEnd();
+
     }
 
     private static void renderEntity(Entity entity, Location reference) {
