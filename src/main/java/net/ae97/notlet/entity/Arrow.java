@@ -70,4 +70,8 @@ public class Arrow extends Entity {
         }
     }
 
+    public Direction getFacingDirection() {
+        return direction;
+    }
+
 }

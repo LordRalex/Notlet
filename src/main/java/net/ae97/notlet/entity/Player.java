@@ -26,6 +26,7 @@ package net.ae97.notlet.entity;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.network.packets.AttackRequestPacket;
 import net.ae97.notlet.network.packets.MoveRequestPacket;
@@ -40,6 +41,7 @@ public class Player extends Entity {
     private final Queue<Packet> requests = new LinkedList<>();
     private int score;
     private int attackCooldown;
+    private Direction direction = Direction.DOWN;
 
     public Player(Location loc) {
         super(loc, 100, 200, "rangerD", 0.05, 32);
@@ -122,6 +124,30 @@ public class Player extends Entity {
 
     public int getScore() {
         return score;
+    }
+
+    public Direction getFacingDirection() {
+        return direction;
+    }
+
+    public void setFacingDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    @Override
+    public String getSprite() {
+        switch (direction) {
+            case UP:
+                return "rangerU";
+            case DOWN:
+                return "rangerD";
+            case LEFT:
+                return "rangerL";
+            case RIGHT:
+                return "rangerR";
+            default:
+                return "rangerD";
+        }
     }
 
     private List<Packet> selectFirstUniquePackets(Queue<Packet> packetRequests) {

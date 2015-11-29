@@ -26,8 +26,10 @@ package net.ae97.notlet.client;
 import java.util.LinkedList;
 import java.util.List;
 import net.ae97.notlet.Location;
+import net.ae97.notlet.entity.Arrow;
 import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
+import org.lwjgl.opengl.GL11;
 
 public class GameInstance {
 
@@ -89,7 +91,17 @@ public class GameInstance {
     }
 
     private static void renderEntity(Entity entity, Location reference) {
-
+        if (entity instanceof Arrow) {
+            Arrow arrow = (Arrow) entity;
+            switch (arrow.getFacingDirection()) {
+                case DOWN:
+                    GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
+                case LEFT:
+                    GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
+                case UP:
+                    GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
+            }
+        }
     }
 
     private static void renderBackground(Location reference) {
