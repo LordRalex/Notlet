@@ -320,6 +320,8 @@ public class Testing {
 
     // The texture that will hold the image details //
     private Texture backg;
+    private Texture wall;
+    private Texture dirt;
     private Texture texture;
     private Texture textureU;
     private Texture textureD;
@@ -378,6 +380,8 @@ public class Testing {
 
         // load texture from PNG file
         backg = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png"));
+        wall = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png"));
+        dirt = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png"));
         currentPlayer = texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
         textureU = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png"));
         textureD = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
@@ -454,6 +458,46 @@ public class Testing {
 
     }
 
+    public void renderMap() {
+        boolean[][] map = GameInstance.getMap();
+        dirt.bind();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j]) {
+                    renderFG(i * 32, j * 32);
+                }
+            }
+        }
+
+
+        wall.bind();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (!map[i][j]) {
+                    renderFG(i * 32, j * 32);
+                }
+            }
+        }
+
+
+
+
+    }
+
+
+    public void renderFG(int x, int y) {
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(x, y);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(x+32, y);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(x+32, y+32);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(x, y+32);
+        GL11.glEnd();
+    }
+
     public void renderBG() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         backg.bind(); // or GL11.glBind(texture.getTextureID());
@@ -504,3 +548,4 @@ public class Testing {
         new Testing().start();
     }
 }
+
