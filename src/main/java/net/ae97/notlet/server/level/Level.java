@@ -105,11 +105,14 @@ public class Level {
         return entities;
     }
 
-    public boolean isPassable(Location loc) {
-        if (loc.getX() < 0 || loc.getY() < 0) {
+    public boolean isPassable(Location topLeft, Location topRight) {
+        if (topLeft.getX() < 0 || topLeft.getY() < 0 || topRight.getX() > map.length || topRight.getY() > map.length) {
             return false;
         }
-        return map[(int) loc.getX()][(int) loc.getY()];
+        return (map[(int) topLeft.getX()][(int) topLeft.getY()]
+                && map[(int) topRight.getX()][(int) topLeft.getY()]
+                && map[(int) topLeft.getX()][(int) topRight.getY()]
+                && map[(int) topRight.getX()][(int) topRight.getY()]);
     }
 
     public int getSeed() {

@@ -44,7 +44,7 @@ public class Player extends Entity {
     private Direction direction = Direction.DOWN;
 
     public Player(Location loc) {
-        super(loc, 100, 200, "rangerD", 0.05, 32);
+        super(loc, 100, 200, "rangerD", 0.06, 32, .93);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Player extends Entity {
                                 newLocation = new Location(old.getX(), old.getY() + getMovementSpeed());
                                 break;
                         }
-                        if (level.isPassable(newLocation)) {
+                        if (level.isPassable(newLocation, new Location(newLocation.getX() + getBlockSize(), newLocation.getY() + getBlockSize()))) {
                             setLocation(newLocation);
                         }
                     }
@@ -97,7 +97,7 @@ public class Player extends Entity {
                                 spawnLocation = new Location(old.getX(), old.getY() + 0001);
                                 break;
                         }
-                        if (level.isPassable(spawnLocation)) {
+                        if (level.isPassable(spawnLocation, new Location(spawnLocation.getX() + getBlockSize(), spawnLocation.getY() + getBlockSize()))) {
                             level.spawnEntity(new Arrow(spawnLocation, request.getDirection()));
                             attackCooldown = 10;
                         }

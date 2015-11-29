@@ -35,7 +35,7 @@ public abstract class Monster extends Entity {
     private Location targetLocation;
 
     public Monster(Location loc, int hp, int value, String sprite, double movementSpeed) {
-        super(loc, hp, value, sprite, movementSpeed, 32);
+        super(loc, hp, value, sprite, movementSpeed, 32, .93);
     }
 
     @Override

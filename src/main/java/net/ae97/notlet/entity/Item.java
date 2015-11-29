@@ -32,7 +32,7 @@ import net.ae97.notlet.server.level.Level;
 public abstract class Item extends Entity {
 
     public Item(Location loc, int hp, int value, String sprite) {
-        super(loc, hp, value, sprite, 0, 32);
+        super(loc, hp, value, sprite, 0, 32, 1);
     }
 
     public abstract void onPickup(Entity entity);

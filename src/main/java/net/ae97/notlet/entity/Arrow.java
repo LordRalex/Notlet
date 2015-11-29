@@ -33,7 +33,7 @@ public class Arrow extends Entity {
     private final int damage = 10;
 
     public Arrow(Location loc, Direction direction) {
-        super(loc, 1, 0, "arrow", 0.07, 32);
+        super(loc, 1, 0, "arrow", 0.07, 32, .92);
         this.direction = direction;
     }
 
@@ -43,20 +43,20 @@ public class Arrow extends Entity {
         Location newLocation = old;
         switch (direction) {
             case LEFT:
-                newLocation = new Location(old.getX() - 16, old.getY());
+                newLocation = new Location(old.getX() - getMovementSpeed(), old.getY());
                 break;
             case RIGHT:
-                newLocation = new Location(old.getX() + 16, old.getY());
+                newLocation = new Location(old.getX() + getMovementSpeed(), old.getY());
                 break;
             case UP:
-                newLocation = new Location(old.getX(), old.getY() - 16);
+                newLocation = new Location(old.getX(), old.getY() - getMovementSpeed());
                 break;
             case DOWN:
-                newLocation = new Location(old.getX(), old.getY() + 16);
+                newLocation = new Location(old.getX(), old.getY() + getMovementSpeed());
                 break;
         }
         setLocation(newLocation);
-        if (!level.isPassable(newLocation)) {
+        if (!level.isPassable(newLocation, new Location(newLocation.getX() + getBlockSize(), newLocation.getY() + getBlockSize()))) {
             level.killEntity(this);
         }
         for (Entity en : level.getEntities()) {

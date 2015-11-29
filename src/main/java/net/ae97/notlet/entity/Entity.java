@@ -34,7 +34,8 @@ import net.ae97.notlet.server.level.Level;
 public abstract class Entity implements Serializable {
 
     private static final GlobalIdentification tracker = new GlobalIdentification();
-    private final int size;
+    private final int spriteSize;
+    private final double blockSize;
     private final int entityId;
     private Location location;
     private int hp;
@@ -42,14 +43,15 @@ public abstract class Entity implements Serializable {
     private final String sprite;
     private double movementSpeed = 0;
 
-    public Entity(Location loc, int hp, int value, String sprite, double movementSpeed, int size) {
+    public Entity(Location loc, int hp, int value, String sprite, double movementSpeed, int spriteSize, double blockSize) {
         this.entityId = tracker.next();
         this.location = loc;
         this.hp = hp;
         this.value = value;
         this.sprite = sprite;
         this.movementSpeed = movementSpeed;
-        this.size = size;
+        this.spriteSize = spriteSize;
+        this.blockSize = blockSize;
     }
 
     public abstract void processTick(Level level);
@@ -99,9 +101,9 @@ public abstract class Entity implements Serializable {
 
     public boolean hasCollidedWith(Entity en) {
         double x1 = en.getLocation().getX();
-        double x2 = en.getLocation().getX() + en.getSize();
+        double x2 = en.getLocation().getX() + en.getBlockSize();
         double y1 = en.getLocation().getY();
-        double y2 = en.getLocation().getY() + en.getSize();
+        double y2 = en.getLocation().getY() + en.getBlockSize();
 
         Location loc1 = new Location(x1, y1);
         Location loc2 = new Location(x1, y2);
@@ -113,15 +115,19 @@ public abstract class Entity implements Serializable {
 
     public boolean isAt(Location loc) {
         double x1 = getLocation().getX();
-        double x2 = getLocation().getX() + getSize();
+        double x2 = getLocation().getX() + getBlockSize();
         double y1 = getLocation().getY();
-        double y2 = getLocation().getY() + getSize();
+        double y2 = getLocation().getY() + getBlockSize();
 
         return (x1 <= loc.getX() && x2 >= loc.getX() && y1 <= loc.getY() && y2 >= loc.getY());
     }
 
-    public int getSize() {
-        return size;
+    public int getSpriteSize() {
+        return spriteSize;
+    }
+
+    public double getBlockSize() {
+        return blockSize;
     }
 
     public boolean canSee(Location location) {
