@@ -321,6 +321,7 @@ import org.newdawn.slick.util.ResourceLoader;
 public class Testing {
 
     // The texture that will hold the image details //
+    private Texture backg;
     private Texture texture;
     private Texture textureU;
     private Texture textureD;
@@ -377,6 +378,7 @@ public class Testing {
     public void init() throws IOException {
 
         // load texture from PNG file
+        backg = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png"));
         texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
         textureU = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png"));
         textureD = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
@@ -398,7 +400,8 @@ public class Testing {
     public void render() {
         Color.white.bind();
         Display.sync(60);
-        texture.bind(); // or GL11.glBind(texture.getTextureID());
+        renderBG();
+        texture.bind();
         //dirt_Texture.bind();
         while (!Display.isCloseRequested()) {
 
@@ -406,6 +409,7 @@ public class Testing {
             // Clear the screen and depth buffer
             pollInput();
             renderGL();
+
 
             Display.update();            
 
@@ -416,18 +420,22 @@ public class Testing {
 
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             x -= 16;
+            renderBG();
             textureL.bind();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             x += 16;
+            renderBG();
             textureR.bind();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             y -= 16;
+            renderBG();
             textureU.bind();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             y += 16;
+            renderBG();
             textureD.bind();
         }
 
@@ -447,9 +455,23 @@ public class Testing {
 
     }
 
+    public void renderBG() {
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        backg.bind(); // or GL11.glBind(texture.getTextureID());
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(0, 0);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(800, 0);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(800, 600);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(0, 600);
+        GL11.glEnd();
+    }
+
     public void renderGL() {
         // Clear The Screen And The Depth Buffer
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0);
         GL11.glVertex2f(x, y);
