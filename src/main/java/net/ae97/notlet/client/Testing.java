@@ -308,11 +308,9 @@ package net.ae97.notlet.client;
 import java.io.IOException;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opencl.api.Filter;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -327,6 +325,7 @@ public class Testing {
     private Texture textureD;
     private Texture textureL;
     private Texture textureR;
+    private Texture currentPlayer;
     //private Texture dirt_Texture;
 
     final int SpriteScaleFactor = 1;
@@ -338,7 +337,7 @@ public class Testing {
     // Start the example
     //
     public void start() throws LWJGLException, IOException {
-        initGL(800,600);
+        initGL(800, 600);
         init();
 
         render();
@@ -379,7 +378,7 @@ public class Testing {
 
         // load texture from PNG file
         backg = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png"));
-        texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
+        currentPlayer = texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
         textureU = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png"));
         textureD = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png"));
         textureL = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerL.png"));
@@ -387,10 +386,10 @@ public class Testing {
         //dirt_Texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png"));
 
         System.out.println("Texture loaded: " + texture);
-        System.out.println(">> Image width: " + texture.getImageWidth()*SpriteScaleFactor);
-        System.out.println(">> Image height: " + texture.getImageHeight()*SpriteScaleFactor);
-        System.out.println(">> Texture width: " + texture.getTextureWidth()*SpriteScaleFactor);
-        System.out.println(">> Texture height: " + texture.getTextureHeight()*SpriteScaleFactor);
+        System.out.println(">> Image width: " + texture.getImageWidth() * SpriteScaleFactor);
+        System.out.println(">> Image height: " + texture.getImageHeight() * SpriteScaleFactor);
+        System.out.println(">> Texture width: " + texture.getTextureWidth() * SpriteScaleFactor);
+        System.out.println(">> Texture height: " + texture.getTextureHeight() * SpriteScaleFactor);
         System.out.println(">> Texture ID: " + texture.getTextureID());
     }
 
@@ -405,13 +404,13 @@ public class Testing {
         //dirt_Texture.bind();
         while (!Display.isCloseRequested()) {
 
+            renderBG();
             // render OpenGL here
             // Clear the screen and depth buffer
             pollInput();
             renderGL();
 
-
-            Display.update();            
+            Display.update();
 
         }
     }
@@ -421,22 +420,22 @@ public class Testing {
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             x -= 16;
             renderBG();
-            textureL.bind();
+            currentPlayer = textureL;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             x += 16;
             renderBG();
-            textureR.bind();
+            currentPlayer = textureR;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             y -= 16;
             renderBG();
-            textureU.bind();
+            currentPlayer = textureU;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             y += 16;
             renderBG();
-            textureD.bind();
+            currentPlayer = textureD;
         }
 
         // keep quad on the screen
@@ -462,25 +461,37 @@ public class Testing {
         GL11.glTexCoord2f(0, 0);
         GL11.glVertex2f(0, 0);
         GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(800, 0);
+        GL11.glVertex2f(100, 0);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(800, 600);
+        GL11.glVertex2f(100, 100);
         GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(0, 600);
+        GL11.glVertex2f(0, 100);
+        GL11.glEnd();
+
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(500, 0);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(500, 100);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(600, 100);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(600, 0);
         GL11.glEnd();
     }
 
     public void renderGL() {
         // Clear The Screen And The Depth Buffer
+        currentPlayer.bind();
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0);
         GL11.glVertex2f(x, y);
         GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y);
+        GL11.glVertex2f(x + texture.getTextureWidth() * SpriteScaleFactor, y);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(x + texture.getTextureWidth()*SpriteScaleFactor, y + texture.getTextureHeight()*SpriteScaleFactor);
+        GL11.glVertex2f(x + texture.getTextureWidth() * SpriteScaleFactor, y + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(x, y + texture.getTextureHeight()*SpriteScaleFactor);
+        GL11.glVertex2f(x, y + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glEnd();
         //GL11.glPopMatrix();
 
