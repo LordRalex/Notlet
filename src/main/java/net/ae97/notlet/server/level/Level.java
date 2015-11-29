@@ -179,8 +179,8 @@ public class Level {
     }
 
     private void populate(Random rng) {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
+        for (int i = 10; i < map.length; i++) {
+            for (int j = 10; j < map.length; j++) {
                 if (map[i][j]) {
                     if (rng.nextInt(4) == 1) {
                         if (rng.nextInt(4) == 1) {
