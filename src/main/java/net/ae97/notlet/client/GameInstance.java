@@ -155,16 +155,11 @@ public class GameInstance {
         synchronized (entities) {
             Player player = getPlayer();
             renderBackground(player.getLocation());
-            updateCamera(player.getLocation());
             renderExit(player.getLocation());
             entities.forEach((en) -> renderEntity(en, player.getLocation()));
         }
 
         pollInput();
-    }
-
-    private static void updateCamera(Location loc){
-        GL11.glViewport(((int)loc.getX()*32)-400, ((int)loc.getY()*32)-300,((int)loc.getX()*32)+400, ((int)loc.getY()*32)+300);
     }
 
     private static void renderEntity(Entity entity, Location reference) {
