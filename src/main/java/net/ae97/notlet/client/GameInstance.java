@@ -44,10 +44,10 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
-import org.newdawn.slick.TrueTypeFont;
 
 public class GameInstance {
 
@@ -83,7 +83,7 @@ public class GameInstance {
         GL11.glOrtho(0, width, height, 0, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
-        Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
+        Font awtFont = new Font("Times New Roman", Font.BOLD, 18);
         font = new TrueTypeFont(awtFont, true);
 
         try {
@@ -206,7 +206,7 @@ public class GameInstance {
         GL11.glVertex2f(200, 648);
         GL11.glEnd();
 
-        font.drawString(65, 610, Integer.toString(player.getHp()), Color.red);
+        font.drawString(65, 610, Integer.toString(player.getHp()), Color.white);
         textureMapping.get("healthbar").bind();
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0);
@@ -219,7 +219,7 @@ public class GameInstance {
         GL11.glVertex2f(20, 630);
         GL11.glEnd();
 
-        font.drawString(65, 630, Integer.toString(player.getScore()), Color.yellow);
+        font.drawString(65, 630, Integer.toString(player.getScore()), Color.white);
         textureMapping.get("score").bind();
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0);

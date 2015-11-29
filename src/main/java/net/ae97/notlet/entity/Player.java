@@ -123,7 +123,9 @@ public class Player extends Entity {
     @Override
     public void damage(int damage) {
         super.damage(damage);
-        engine.sendPacket(new EntityDamagePacket(this.getId(), damage));
+        if (engine != null) {
+            engine.sendPacket(new EntityDamagePacket(this.getId(), damage));
+        }
     }
 
     public void addToQueue(Packet p) {
