@@ -31,6 +31,6 @@ import net.ae97.notlet.Location;
 public class Slime extends Monster {
 
     public Slime(Location loc) {
-        super(loc, 20, 10, "slime", 0.03);
+        super(loc, 20, 10, "slime", 0.03, 1);
     }
 }

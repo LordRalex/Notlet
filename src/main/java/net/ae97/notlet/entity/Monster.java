@@ -31,16 +31,49 @@ import net.ae97.notlet.server.level.Level;
  */
 public abstract class Monster extends Entity {
 
-    private boolean isAggro = false;
+    private boolean isAggro = true;
     private Location targetLocation;
+    private int damage;
 
-    public Monster(Location loc, int hp, int value, String sprite, double movementSpeed) {
+    public Monster(Location loc, int hp, int value, String sprite, double movementSpeed, int damage) {
         super(loc, hp, value, sprite, movementSpeed, 32, .93);
     }
 
     @Override
     public void processTick(Level level) {
+        Location old = getLocation();
+        targetLocation = level.getPlayer().getLocation();
+
+        double distanceX = old.getX() - targetLocation.getX();
+        double distanceY = old.getY() - targetLocation.getY();
+
+        Location newLocation;
         
+        if (Math.random() * 2 > 1) {
+            if (distanceX > 0) {
+                newLocation = new Location(old.getX() - getMovementSpeed(), old.getY());
+                //move right
+            } else {
+                newLocation = new Location(old.getX() + getMovementSpeed(), old.getY());
+                //move left
+            }
+        } else {
+            if (distanceY > 0) {
+                newLocation = new Location(old.getX(), old.getY() - getMovementSpeed());
+                //move down
+            } else {
+                newLocation = new Location(old.getX(), old.getY() + getMovementSpeed());
+            }
+        }
+
+        if (level.isPassable(newLocation, new Location(newLocation.getX() + getBlockSize(), newLocation.getY() + getBlockSize()))) {
+            setLocation(newLocation);
+        }
+
+        level.getEntities().stream().filter((en) -> (en instanceof Player && en.hasCollidedWith(this))).map((en) -> {
+            en.damage(damage);
+            return en;
+        });
     }
 
     public Location getTargetLocation() {
