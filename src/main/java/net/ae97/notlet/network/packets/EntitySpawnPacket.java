@@ -23,21 +23,23 @@
  */
 package net.ae97.notlet.network.packets;
 
+import net.ae97.notlet.entity.Entity;
+
 public class EntitySpawnPacket extends Packet {
 
-    private final int entityId;
+    private final Entity entity;
 
-    public EntitySpawnPacket(int id) {
-        this.entityId = id;
+    public EntitySpawnPacket(Entity id) {
+        this.entity = id;
     }
 
     @Override
     public PacketType getType() {
-        return PacketType.EntityDeath;
+        return PacketType.EntitySpawn;
     }
 
-    public int getEntityId() {
-        return entityId;
+    public Entity getEntity() {
+        return entity;
     }
 
 }

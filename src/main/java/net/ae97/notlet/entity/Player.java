@@ -29,8 +29,10 @@ import java.util.Queue;
 import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.network.packets.AttackRequestPacket;
+import net.ae97.notlet.network.packets.EntitySpawnPacket;
 import net.ae97.notlet.network.packets.MoveRequestPacket;
 import net.ae97.notlet.network.packets.Packet;
+import net.ae97.notlet.server.engine.GameEngine;
 import net.ae97.notlet.server.level.Level;
 
 /**
@@ -42,9 +44,11 @@ public class Player extends Entity {
     private int score;
     private int attackCooldown;
     private Direction direction = Direction.DOWN;
+    private transient final GameEngine engine;
 
-    public Player(Location loc) {
+    public Player(Location loc, GameEngine engine) {
         super(loc, 100, 200, "rangerD", 0.06, 32, .93);
+        this.engine = engine;
     }
 
     @Override
@@ -98,7 +102,9 @@ public class Player extends Entity {
                                 break;
                         }
                         if (level.isPassable(spawnLocation, new Location(spawnLocation.getX() + getBlockSize(), spawnLocation.getY() + getBlockSize()))) {
-                            level.spawnEntity(new Arrow(spawnLocation, request.getDirection()));
+                            Arrow arrow = new Arrow(spawnLocation, request.getDirection());
+                            level.spawnEntity(arrow);
+                            engine.sendPacket(new EntitySpawnPacket(arrow));
                             attackCooldown = 10;
                         }
                     }

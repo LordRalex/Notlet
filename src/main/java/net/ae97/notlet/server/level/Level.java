@@ -23,6 +23,7 @@
  */
 package net.ae97.notlet.server.level;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -102,7 +103,11 @@ public class Level {
     }
 
     public List<Entity> getEntities() {
-        return entities;
+        synchronized (entities) {
+            List<Entity> clone = new ArrayList<>(entities.size());
+            clone.addAll(entities);
+            return clone;
+        }
     }
 
     public boolean isPassable(Location topLeft, Location topRight) {
@@ -130,7 +135,9 @@ public class Level {
     }
 
     public void spawnEntity(Entity entity) {
-        entities.add(entity);
+        synchronized (entities) {
+            entities.add(entity);
+        }
     }
 
     public void processTick() {

@@ -25,7 +25,10 @@ package net.ae97.notlet.client.network;
 
 import java.io.IOException;
 import net.ae97.notlet.client.GameInstance;
+import net.ae97.notlet.network.packets.EntityDamagePacket;
+import net.ae97.notlet.network.packets.EntityDeathPacket;
 import net.ae97.notlet.network.packets.EntityLocationUpdatePacket;
+import net.ae97.notlet.network.packets.EntitySpawnPacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
 
@@ -49,6 +52,8 @@ public class GameProcessor extends Thread {
                     }
                     break;
                     case EndLevel: {
+                        GameInstance.unload();
+                        break;
                     }
                     case StartLevel: {
                         StartLevelPacket packet = (StartLevelPacket) next;
@@ -59,6 +64,22 @@ public class GameProcessor extends Thread {
                         EntityLocationUpdatePacket packet = (EntityLocationUpdatePacket) next;
                         GameInstance.updateEntityLocation(packet.getEntityId(), packet.getLocation());
                     }
+                    break;
+                    case EntitySpawn: {
+                        EntitySpawnPacket packet = (EntitySpawnPacket) next;
+                        GameInstance.spawnEnemy(packet.getEntity());
+                    }
+                    break;
+                    case EntityDeath: {
+                        EntityDeathPacket packet = (EntityDeathPacket) next;
+                        GameInstance.removeEntity(packet.getEntityId());
+                    }
+                    break;
+                    case EntityDamage: {
+                        EntityDamagePacket packet = (EntityDamagePacket) next;
+                        GameInstance.updateEntityHealth(packet.getEntityId(), packet.getDamage());
+                    }
+                    break;
                 }
             }
         } catch (IOException ex) {

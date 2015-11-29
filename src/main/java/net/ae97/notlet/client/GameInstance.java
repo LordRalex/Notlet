@@ -33,6 +33,7 @@ import net.ae97.notlet.Location;
 import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
+import net.ae97.notlet.network.packets.AttackRequestPacket;
 import net.ae97.notlet.network.packets.MoveRequestPacket;
 import net.ae97.notlet.network.packets.Packet;
 import org.lwjgl.LWJGLException;
@@ -93,6 +94,10 @@ public class GameInstance {
 
     public static boolean isLoaded() {
         return isLoaded;
+    }
+
+    public static void unload() {
+        isLoaded = false;
     }
 
     public static void init(boolean[][] map, List<Entity> entityList, ServerConnection conn) {
@@ -225,6 +230,18 @@ public class GameInstance {
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             sendPacket(new MoveRequestPacket(Direction.DOWN));
             getPlayer().setFacingDirection(Direction.DOWN);
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+            sendPacket(new AttackRequestPacket(Direction.LEFT));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+            sendPacket(new AttackRequestPacket(Direction.RIGHT));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+            sendPacket(new AttackRequestPacket(Direction.UP));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+            sendPacket(new AttackRequestPacket(Direction.DOWN));
         }
 
     }

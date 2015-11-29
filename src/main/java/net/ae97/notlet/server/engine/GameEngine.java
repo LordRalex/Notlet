@@ -24,12 +24,14 @@
 package net.ae97.notlet.server.engine;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import net.ae97.notlet.GlobalIdentification;
 import net.ae97.notlet.Location;
+import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.logging.LoggerFactory;
 import net.ae97.notlet.network.packets.EndGamePacket;
@@ -49,7 +51,7 @@ public class GameEngine implements Runnable {
     private Level level;
     private final boolean isSingleLevel;
     private final ClientEngine client;
-    private Player player;
+    private final Player player;
     private Location endPoint;
 
     public GameEngine(ClientEngine client, String seed) {
@@ -63,7 +65,7 @@ public class GameEngine implements Runnable {
             isSingleLevel = true;
             level = new Level(seed.hashCode());
         }
-        player = new Player(new Location(0, 0));
+        player = new Player(new Location(0, 0), this);
         level.spawnEntity(player);
     }
 
@@ -84,14 +86,15 @@ public class GameEngine implements Runnable {
     @Override
     public void run() {
         try {
-            level.getEntities().stream().forEach((entity) -> {
+            List<Entity> entities = level.getEntities();
+            entities.stream().forEach((entity) -> {
                 Location previous = entity.getLocation();
                 entity.processTick(level);
                 if (!previous.equals(entity.getLocation())) {
                     sendPacket(new EntityLocationUpdatePacket(entity.getId(), entity.getLocation()));
                 }
             });
-            level.getEntities().stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
+            entities.stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
                 if (!(en instanceof Player)) {
                     return;
                 }
@@ -138,7 +141,7 @@ public class GameEngine implements Runnable {
         player.addToQueue(p);
     }
 
-    private void sendPacket(Packet p) {
+    public void sendPacket(Packet p) {
         try {
             client.sendPacket(p);
         } catch (IOException ex) {
