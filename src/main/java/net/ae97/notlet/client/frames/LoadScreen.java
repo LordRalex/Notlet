@@ -74,7 +74,7 @@ public class LoadScreen extends JFrame {
                 GameInstance.createTextures();
                 GameProcessor processor = new GameProcessor(connection);
                 processor.start();
-                Testing.display();
+                Testing.display(connection);
             } catch (Exception ex) {
                 ClientCore.getLogger().log(Level.SEVERE, "Error on starting game", ex);
                 JOptionPane.showMessageDialog(null, "Error on starting: " + ex.getMessage());

@@ -306,6 +306,7 @@ package net.ae97.notlet.client;
  */
 /////////////////////////////////////////////////////////////////////////////////
 import java.io.IOException;
+import net.ae97.notlet.client.network.ServerConnection;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -328,8 +329,9 @@ public class Testing {
     private Texture textureL;
     private Texture textureR;
     private Texture currentPlayer;
-    //private Texture dirt_Texture;
+    private ServerConnection connection;
 
+    //private Texture dirt_Texture;
     final int SpriteScaleFactor = 1;
 
     int x = 0;
@@ -415,6 +417,8 @@ public class Testing {
             Display.update();
 
         }
+
+        connection.close();
     }
 
     public void pollInput() {
@@ -511,7 +515,9 @@ public class Testing {
     //
     // Main Class
     //
-    public static void display() throws LWJGLException, IOException {
-        new Testing().start();
+    public static void display(ServerConnection connection) throws LWJGLException, IOException {
+        Testing testing = new Testing();
+        testing.connection = connection;
+        testing.start();
     }
 }

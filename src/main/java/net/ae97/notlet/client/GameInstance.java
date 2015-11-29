@@ -51,7 +51,7 @@ public class GameInstance {
     private static boolean[][] levelMap;
     private static final List<Entity> entities = new LinkedList<>();
     private static final Map<String, Texture> textureMapping = new HashMap<>();
-    private static final int width = 600, height = 800;
+    private static final int width = 800, height = 600;
 
     public static void createTextures() throws LWJGLException {
         Display.setDisplayMode(new DisplayMode(width, height));
