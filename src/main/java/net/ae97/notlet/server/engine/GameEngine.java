@@ -51,7 +51,6 @@ public class GameEngine implements Runnable {
     private final ClientEngine client;
     private Player player;
     private Location endPoint;
-    private int tickCount = 0;
 
     public GameEngine(ClientEngine client, String seed) {
         this.client = client;
@@ -84,10 +83,6 @@ public class GameEngine implements Runnable {
      */
     @Override
     public void run() {
-        tickCount++;
-        if (tickCount % 40 == 0) {
-            logger.info("Tick counter: " + tickCount);
-        }
         try {
             level.getEntities().stream().forEach((entity) -> {
                 Location previous = entity.getLocation();

@@ -59,16 +59,16 @@ public class Player extends Entity {
                         Location newLocation = old;
                         switch (request.getDirection()) {
                             case LEFT:
-                                newLocation = new Location(old.getX() - 16, old.getY());
+                                newLocation = new Location(old.getX() - getMovementSpeed(), old.getY());
                                 break;
                             case RIGHT:
-                                newLocation = new Location(old.getX() + 16, old.getY());
+                                newLocation = new Location(old.getX() + getMovementSpeed(), old.getY());
                                 break;
                             case UP:
-                                newLocation = new Location(old.getX(), old.getY() - 16);
+                                newLocation = new Location(old.getX(), old.getY() - getMovementSpeed());
                                 break;
                             case DOWN:
-                                newLocation = new Location(old.getX(), old.getY() + 16);
+                                newLocation = new Location(old.getX(), old.getY() + getMovementSpeed());
                                 break;
                         }
                         if (level.isPassable(newLocation)) {
@@ -85,16 +85,16 @@ public class Player extends Entity {
                         Location spawnLocation = old;
                         switch (request.getDirection()) {
                             case LEFT:
-                                spawnLocation = new Location(old.getX() - 16.0001, old.getY());
+                                spawnLocation = new Location(old.getX() - 0001, old.getY());
                                 break;
                             case RIGHT:
-                                spawnLocation = new Location(old.getX() + 16.0001, old.getY());
+                                spawnLocation = new Location(old.getX() + 0001, old.getY());
                                 break;
                             case UP:
-                                spawnLocation = new Location(old.getX(), old.getY() - 16.0001);
+                                spawnLocation = new Location(old.getX(), old.getY() - 0001);
                                 break;
                             case DOWN:
-                                spawnLocation = new Location(old.getX(), old.getY() + 16.0001);
+                                spawnLocation = new Location(old.getX(), old.getY() + 0001);
                                 break;
                         }
                         if (level.isPassable(spawnLocation)) {

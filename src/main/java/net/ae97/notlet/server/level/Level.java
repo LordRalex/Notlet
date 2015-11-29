@@ -106,6 +106,9 @@ public class Level {
     }
 
     public boolean isPassable(Location loc) {
+        if (loc.getX() < 0 || loc.getY() < 0) {
+            return false;
+        }
         return map[(int) loc.getX()][(int) loc.getY()];
     }
 

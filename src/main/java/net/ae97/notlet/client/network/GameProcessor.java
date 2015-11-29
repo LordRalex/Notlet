@@ -25,6 +25,7 @@ package net.ae97.notlet.client.network;
 
 import java.io.IOException;
 import net.ae97.notlet.client.GameInstance;
+import net.ae97.notlet.network.packets.EntityLocationUpdatePacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
 
@@ -54,6 +55,10 @@ public class GameProcessor extends Thread {
                         GameInstance.init(packet.getMap(), packet.getEntities(), connection);
                     }
                     break;
+                    case EntityLocationUpdate: {
+                        EntityLocationUpdatePacket packet = (EntityLocationUpdatePacket) next;
+                        GameInstance.updateEntityLocation(packet.getEntityId(), packet.getLocation());
+                    }
                 }
             }
         } catch (IOException ex) {
