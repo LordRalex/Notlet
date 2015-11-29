@@ -34,6 +34,7 @@ public abstract class Monster extends Entity {
     private boolean isAggro = true;
     private Location targetLocation;
     private final int damage;
+    private int attackDelay = 0;
 
     public Monster(Location loc, int hp, int value, String sprite, double movementSpeed, int damage) {
         super(loc, hp, value, sprite, movementSpeed, 32, .93);
@@ -71,9 +72,14 @@ public abstract class Monster extends Entity {
             setLocation(newLocation);
         }
 
-        level.getEntities().stream().filter((en) -> (en instanceof Player && en.hasCollidedWith(this))).forEach((en) -> {
-            en.damage(damage);
-        });
+        if (attackDelay == 0) {
+            level.getEntities().stream().filter((en) -> (en instanceof Player && en.hasCollidedWith(this))).forEach((en) -> {
+                en.damage(damage);
+                attackDelay = 10;
+            });
+        } else {
+            attackDelay--;
+        }
     }
 
     public Location getTargetLocation() {

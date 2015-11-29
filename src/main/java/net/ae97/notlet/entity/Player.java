@@ -47,7 +47,7 @@ public class Player extends Entity {
     private transient final GameEngine engine;
 
     public Player(Location loc, GameEngine engine) {
-        super(loc, 100, 200, "rangerD", 0.06, 32, .93);
+        super(loc, 100, 0, "rangerD", 0.06, 32, .93);
         this.engine = engine;
     }
 
@@ -105,7 +105,7 @@ public class Player extends Entity {
                             Arrow arrow = new Arrow(spawnLocation, request.getDirection());
                             level.spawnEntity(arrow);
                             engine.sendPacket(new EntitySpawnPacket(arrow));
-                            attackCooldown = 40;
+                            attackCooldown = 15;
                         }
                     }
                     break;
