@@ -30,9 +30,10 @@ import net.ae97.notlet.server.level.Level;
 public class Arrow extends Entity {
 
     private final Direction direction;
+    private final int damage = 10;
 
-    public Arrow(Location loc, int hp, Direction direction) {
-        super(loc, hp, 0, "arrow", 0.07, 32);
+    public Arrow(Location loc, Direction direction) {
+        super(loc, 1, 0, "arrow", 0.07, 32);
         this.direction = direction;
     }
 
@@ -55,6 +56,18 @@ public class Arrow extends Entity {
                 break;
         }
         setLocation(newLocation);
+        if (!level.isPassable(newLocation)) {
+            level.killEntity(this);
+        }
+        for (Entity en : level.getEntities()) {
+            if (en == this) {
+                continue;
+            }
+            if (en.hasCollidedWith(this)) {
+                en.damage(damage);
+                level.killEntity(this);
+            }
+        }
     }
 
 }
