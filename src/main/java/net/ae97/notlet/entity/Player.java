@@ -41,6 +41,7 @@ import net.ae97.notlet.server.level.Level;
 public class Player extends Entity {
 
     private final Queue<Packet> requests = new LinkedList<>();
+    private final int attackCooldownAmount = 35;
     private int score;
     private int attackCooldown;
     private Direction direction = Direction.DOWN;
@@ -105,7 +106,7 @@ public class Player extends Entity {
                             Arrow arrow = new Arrow(spawnLocation, request.getDirection());
                             level.spawnEntity(arrow);
                             engine.sendPacket(new EntitySpawnPacket(arrow));
-                            attackCooldown = 15;
+                            attackCooldown = attackCooldownAmount;
                         }
                     }
                     break;

@@ -59,19 +59,19 @@ public class Arrow extends Entity {
         if (!level.isPassable(newLocation, new Location(newLocation.getX() + getBlockSize(), newLocation.getY() + getBlockSize()))) {
             level.killEntity(this);
         }
-        for (Entity en : level.getEntities()) {
-            if (en == this) {
-                continue;
-            }
-            if (en instanceof Monster && en.hasCollidedWith(this)) {
-                en.damage(damage);
-                level.killEntity(this);
-            }
+        if (level.getEntities().stream()
+                .filter((en) -> !(en == this))
+                .filter((en) -> (en instanceof Monster))
+                .filter((en) -> en.hasCollidedWith(this))
+                .map((en) -> {
+                    en.damage(damage);
+                    return this;
+                }).count() > 0) {
+            level.killEntity(this);
         }
     }
 
     public Direction getFacingDirection() {
         return direction;
     }
-
 }

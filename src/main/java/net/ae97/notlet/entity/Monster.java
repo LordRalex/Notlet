@@ -31,6 +31,7 @@ import net.ae97.notlet.server.level.Level;
  */
 public abstract class Monster extends Entity {
 
+    private final int attackDelayValue = 5;
     private boolean isAggro = true;
     private Location targetLocation;
     private final int damage;
@@ -75,7 +76,7 @@ public abstract class Monster extends Entity {
         if (attackDelay == 0) {
             level.getEntities().stream().filter((en) -> (en instanceof Player && en.hasCollidedWith(this))).forEach((en) -> {
                 en.damage(damage);
-                attackDelay = 10;
+                attackDelay = attackDelayValue;
             });
         } else {
             attackDelay--;

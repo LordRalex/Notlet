@@ -96,7 +96,7 @@ public class GameEngine implements Runnable {
                 }
             });
             entities.stream().filter((en) -> (en.getHp() <= 0)).forEach((en) -> {
-                if (!(en instanceof Player)) {
+                if (en instanceof Player) {
                     return;
                 }
                 level.killEntity(en);
