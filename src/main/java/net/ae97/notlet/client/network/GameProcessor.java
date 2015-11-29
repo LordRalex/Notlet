@@ -50,9 +50,10 @@ public class GameProcessor extends Thread {
                 Packet next = connection.readPacket();
                 switch (next.getType()) {
                     case EndGame: {
-                        GameInstance.setAcceptUserInput(false);
                         interrupt();
+                        GameInstance.unload();
                         JOptionPane.showMessageDialog(null, "Score: " + ((EndGamePacket) next).getFinalScore());
+                        System.exit(0);
                     }
                     break;
                     case EndLevel: {

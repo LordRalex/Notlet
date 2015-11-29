@@ -33,10 +33,11 @@ public abstract class Monster extends Entity {
 
     private boolean isAggro = true;
     private Location targetLocation;
-    private int damage;
+    private final int damage;
 
     public Monster(Location loc, int hp, int value, String sprite, double movementSpeed, int damage) {
         super(loc, hp, value, sprite, movementSpeed, 32, .93);
+        this.damage = damage;
     }
 
     @Override
@@ -48,7 +49,7 @@ public abstract class Monster extends Entity {
         double distanceY = old.getY() - targetLocation.getY();
 
         Location newLocation;
-        
+
         if (Math.random() * 2 > 1) {
             if (distanceX > 0) {
                 newLocation = new Location(old.getX() - getMovementSpeed(), old.getY());
@@ -70,9 +71,8 @@ public abstract class Monster extends Entity {
             setLocation(newLocation);
         }
 
-        level.getEntities().stream().filter((en) -> (en instanceof Player && en.hasCollidedWith(this))).map((en) -> {
+        level.getEntities().stream().filter((en) -> (en instanceof Player && en.hasCollidedWith(this))).forEach((en) -> {
             en.damage(damage);
-            return en;
         });
     }
 
