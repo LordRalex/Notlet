@@ -31,7 +31,6 @@ import java.util.Map;
 import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.client.network.ServerConnection;
-import net.ae97.notlet.entity.Arrow;
 import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.network.packets.MoveRequestPacket;
@@ -52,6 +51,7 @@ public class GameInstance {
     private static final List<Entity> entities = new LinkedList<>();
     private static final Map<String, Texture> textureMapping = new HashMap<>();
     private static final int width = 800, height = 600;
+    private static boolean isLoaded = false;
 
     public static void createTextures() throws LWJGLException {
         Display.setDisplayMode(new DisplayMode(width, height));
@@ -83,20 +83,28 @@ public class GameInstance {
             textureMapping.put("rangerU", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png")));
             textureMapping.put("skele", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("skele.png")));
             textureMapping.put("slime", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("slime.png")));
+            textureMapping.put("hp", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("skele.png")));
+            textureMapping.put("pb", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("slime.png")));
             textureMapping.put("wall", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png")));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
 
+    public static boolean isLoaded() {
+        return isLoaded;
+    }
+
     public static void init(boolean[][] map, List<Entity> entityList, ServerConnection conn) {
         init(map, entityList);
         connection = conn;
+        isLoaded = true;
     }
 
     public static void init(boolean[][] map, List<Entity> entityList) {
         levelMap = map;
         entities.addAll(entityList);
+        isLoaded = true;
     }
 
     public static boolean[][] getMap() {
@@ -141,6 +149,9 @@ public class GameInstance {
      * This renders a single frame for the game
      */
     public static void renderFrame() {
+        if (!isLoaded()) {
+            return;
+        }
         synchronized (entities) {
             Player player = getPlayer();
             renderBackground(player.getLocation());
@@ -152,33 +163,46 @@ public class GameInstance {
     }
 
     private static void renderEntity(Entity entity, Location reference) {
+        int SpriteScaleFactor = 1;
+        double x = entity.getLocation().getX();
+        double y = entity.getLocation().getY();
         Texture texture = textureMapping.get(entity.getSprite());
         texture.bind();
         GL11.glBegin(GL11.GL_QUADS);
-        if (entity instanceof Arrow) {
-            Arrow arrow = (Arrow) entity;
-            switch (arrow.getFacingDirection()) {
-                case DOWN:
-                    GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
-                case LEFT:
-                    GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
-                case UP:
-                    GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
-            }
-        }
         GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2f(0, 0);
+        GL11.glVertex2d(x, y);
         GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(32, 0);
+        GL11.glVertex2d(x + texture.getTextureWidth() * SpriteScaleFactor, y);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(32, 32);
+        GL11.glVertex2d(x + texture.getTextureWidth() * SpriteScaleFactor, y + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(0, 32);
+        GL11.glVertex2d(x, y + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glEnd();
     }
 
     private static void renderBackground(Location reference) {
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        if (GameInstance.getMap() == null) {
+            return;
+        }
+        boolean[][] map = GameInstance.getMap();
+        textureMapping.get("dirt").bind();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j]) {
+                    renderFG(i * 32, j * 32);
+                }
+            }
+        }
 
+        textureMapping.get("wall").bind();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (!map[i][j]) {
+                    renderFG(i * 32, j * 32);
+                }
+            }
+        }
     }
 
     private static void renderExit(Location reference) {
@@ -186,7 +210,6 @@ public class GameInstance {
     }
 
     private static void pollInput() {
-
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             sendPacket(new MoveRequestPacket(Direction.LEFT));
         }
@@ -199,7 +222,19 @@ public class GameInstance {
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             sendPacket(new MoveRequestPacket(Direction.DOWN));
         }
+    }
 
+    public static void renderFG(int x, int y) {
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(x, y);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(x + 32, y);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(x + 32, y + 32);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(x, y + 32);
+        GL11.glEnd();
     }
 
     private static void sendPacket(Packet packet) {

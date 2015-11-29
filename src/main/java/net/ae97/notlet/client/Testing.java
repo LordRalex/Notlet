@@ -410,9 +410,7 @@ public class Testing {
 
             // render OpenGL here
             // Clear the screen and depth buffer
-            renderMap();
-            pollInput();
-            renderGL();
+            GameInstance.renderFrame();
 
             Display.update();
 
