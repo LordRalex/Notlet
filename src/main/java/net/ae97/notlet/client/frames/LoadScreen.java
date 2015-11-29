@@ -23,7 +23,6 @@
  */
 package net.ae97.notlet.client.frames;
 
-import net.ae97.notlet.client.Testing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,6 +33,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import net.ae97.notlet.client.ClientCore;
+import net.ae97.notlet.client.Testing;
+import net.ae97.notlet.client.network.GameProcessor;
 import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.StartGamePacket;
 
@@ -52,12 +53,12 @@ public class LoadScreen extends JFrame {
         setUndecorated(true);
         setVisible(true);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); 
+        setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         setLayout(new BorderLayout());
         setContentPane(new JLabel(new ImageIcon(getClass().getResource("/BIGLET.png"))));
         setLayout(new FlowLayout());
         repaint();
-        
+
     }
 
     public void start() {
@@ -69,6 +70,8 @@ public class LoadScreen extends JFrame {
                 StartGamePacket startGamePacket = new StartGamePacket(seed);
                 connection.sendPacket(startGamePacket);
                 dispose();
+                GameProcessor processor = new GameProcessor(connection);
+                processor.start();
                 Testing.display();
             } catch (Exception ex) {
                 ClientCore.getLogger().log(Level.SEVERE, "Error on starting game", ex);

@@ -31,6 +31,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLException;
 import net.ae97.notlet.network.packets.ErrorPacket;
 import net.ae97.notlet.network.packets.LoginPacket;
 import net.ae97.notlet.network.packets.Packet;
@@ -106,7 +107,7 @@ public class ClientEngine extends Thread {
                                     game.handleGamePacket(next);
                                 }
                             }
-                        } catch (EOFException | SocketException ex) {
+                        } catch (EOFException | SocketException | SSLException ex) {
                             isAlive = false;
                         } catch (Exception ex) {
                             ServerCore.getLogger().log(Level.SEVERE, "Error handling client packet", ex);
