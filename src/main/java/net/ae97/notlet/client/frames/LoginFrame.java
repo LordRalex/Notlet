@@ -23,6 +23,8 @@
  */
 package net.ae97.notlet.client.frames;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import net.ae97.notlet.client.frames.listeners.LoginButtonListener;
 import net.ae97.notlet.client.frames.listeners.ContinuousButtonListener;
 import net.ae97.notlet.client.frames.listeners.ReplayButtonListener;
@@ -71,7 +73,7 @@ public class LoginFrame extends JFrame {
 
         setTitle("Notlet Login");
         setSize(300, 200);
-        setLocation(500, 280);
+     
 
         usernameLabel.setBounds(10, 10, 80, 25);
         passwordLabel.setBounds(10, 40, 80, 25);
@@ -112,6 +114,9 @@ public class LoginFrame extends JFrame {
 
         RegisterButtonListener registerListener = new RegisterButtonListener(this);
         registerButton.addActionListener(registerListener);
+        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         getContentPane().add(panel);
 
