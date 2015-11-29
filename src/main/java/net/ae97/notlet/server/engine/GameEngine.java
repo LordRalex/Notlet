@@ -75,7 +75,7 @@ public class GameEngine implements Runnable {
      */
     public void start() throws IOException {
         level.generate();
-        endPoint = new Location(level.getSize(), level.getSize());
+        endPoint = new Location(level.getSize() - .5, level.getSize() - .5);
         client.sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));
         executor.scheduleAtFixedRate(this, 0, 25, TimeUnit.MILLISECONDS);
         logger.info("Started");
@@ -118,7 +118,7 @@ public class GameEngine implements Runnable {
                 } else {
                     level = new Level(this);
                     level.generate();
-                    endPoint = new Location(level.getSize(), level.getSize());
+                    endPoint = new Location(level.getSize() - .5, level.getSize() - .5);
                     player.setLocation(new Location(0, 0));
                     level.spawnEntity(player);
                     sendPacket(new StartLevelPacket(level.getMap(), level.getEntities()));

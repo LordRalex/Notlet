@@ -119,7 +119,10 @@ public class GameInstance {
 
     public static void init(boolean[][] map, List<Entity> entityList) {
         levelMap = map;
-        entities.addAll(entityList);
+        synchronized (entities) {
+            entities.clear();
+            entities.addAll(entityList);
+        }
         isLoaded = true;
         acceptInput = true;
     }
