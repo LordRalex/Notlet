@@ -212,16 +212,21 @@ public class GameInstance {
     private static void pollInput() {
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             sendPacket(new MoveRequestPacket(Direction.LEFT));
+            getPlayer().setFacingDirection(Direction.LEFT);
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             sendPacket(new MoveRequestPacket(Direction.RIGHT));
+            getPlayer().setFacingDirection(Direction.RIGHT);
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             sendPacket(new MoveRequestPacket(Direction.UP));
+            getPlayer().setFacingDirection(Direction.UP);
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             sendPacket(new MoveRequestPacket(Direction.DOWN));
+            getPlayer().setFacingDirection(Direction.DOWN);
         }
+
     }
 
     public static void renderFG(int x, int y) {
