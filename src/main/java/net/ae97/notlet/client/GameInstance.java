@@ -62,7 +62,6 @@ public class GameInstance {
 
     public static void createTextures() throws LWJGLException {
 
-
         Display.setDisplayMode(new DisplayMode(width, height));
         Display.create();
         Display.setVSyncEnabled(true);
@@ -104,6 +103,25 @@ public class GameInstance {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static void render(ServerConnection conn) {
+        connection = conn;
+        Color.white.bind();
+        Display.sync(60);
+        //texture.bind();
+        //dirt_Texture.bind();
+        while (!Display.isCloseRequested()) {
+
+            // render OpenGL here
+            // Clear the screen and depth buffer
+            GameInstance.renderFrame();
+
+            Display.update();
+
+        }
+
+        connection.close();
     }
 
     public static boolean isLoaded() {
@@ -192,7 +210,7 @@ public class GameInstance {
         pollInput();
     }
 
-    private static void renderHUD(Player player){
+    private static void renderHUD(Player player) {
 
         textureMapping.get("SMALLLET").bind();
         GL11.glBegin(GL11.GL_QUADS);
@@ -219,19 +237,18 @@ public class GameInstance {
         GL11.glVertex2f(20, 630);
         GL11.glEnd();
 
-        font.drawString(65, 630, Integer.toString(player.getScore()), Color.white);
-        textureMapping.get("score").bind();
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2f(20, 630);
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(60, 630);
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(60, 650);
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(20, 650);
-        GL11.glEnd();
-
+        /*font.drawString(65, 630, Integer.toString(player.getScore()), Color.white);
+         textureMapping.get("score").bind();
+         GL11.glBegin(GL11.GL_QUADS);
+         GL11.glTexCoord2f(0, 0);
+         GL11.glVertex2f(20, 630);
+         GL11.glTexCoord2f(1, 0);
+         GL11.glVertex2f(60, 630);
+         GL11.glTexCoord2f(1, 1);
+         GL11.glVertex2f(60, 650);
+         GL11.glTexCoord2f(0, 1);
+         GL11.glVertex2f(20, 650);
+         GL11.glEnd();*/
     }
 
     private static void renderEntity(Entity entity, Location reference) {

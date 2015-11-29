@@ -34,7 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import net.ae97.notlet.client.ClientCore;
 import net.ae97.notlet.client.GameInstance;
-import net.ae97.notlet.client.Testing;
 import net.ae97.notlet.client.network.GameProcessor;
 import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.network.packets.StartGamePacket;
@@ -74,7 +73,7 @@ public class LoadScreen extends JFrame {
                 GameInstance.createTextures();
                 GameProcessor processor = new GameProcessor(connection);
                 processor.start();
-                Testing.display(connection);
+                GameInstance.render(connection);
             } catch (Exception ex) {
                 ClientCore.getLogger().log(Level.SEVERE, "Error on starting game", ex);
                 JOptionPane.showMessageDialog(null, "Error on starting: " + ex.getMessage());
