@@ -170,13 +170,13 @@ public class GameInstance {
         texture.bind();
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2d(x, y);
+        GL11.glVertex2d(x * 32, y * 32);
         GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2d(x + texture.getTextureWidth() * SpriteScaleFactor, y);
+        GL11.glVertex2d((x * 32) + texture.getTextureWidth() * SpriteScaleFactor, y * 32);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2d(x + texture.getTextureWidth() * SpriteScaleFactor, y + texture.getTextureHeight() * SpriteScaleFactor);
+        GL11.glVertex2d((x * 32) + texture.getTextureWidth() * SpriteScaleFactor, (y * 32) + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2d(x, y + texture.getTextureHeight() * SpriteScaleFactor);
+        GL11.glVertex2d(x * 32, (y * 32) + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glEnd();
     }
 
