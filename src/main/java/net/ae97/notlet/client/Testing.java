@@ -411,6 +411,7 @@ public class Testing {
             renderBG();
             // render OpenGL here
             // Clear the screen and depth buffer
+            renderMap();
             pollInput();
             renderGL();
 
@@ -459,6 +460,7 @@ public class Testing {
     }
 
     public void renderMap() {
+        if (GameInstance.getMap() == null) return;
         boolean[][] map = GameInstance.getMap();
         dirt.bind();
         for (int i = 0; i < map.length; i++) {
@@ -478,9 +480,6 @@ public class Testing {
                 }
             }
         }
-
-
-
 
     }
 
