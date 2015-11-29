@@ -49,10 +49,10 @@ public class Arrow extends Entity {
                 newLocation = new Location(old.getX() + 16, old.getY());
                 break;
             case UP:
-                newLocation = new Location(old.getX() - 16, old.getY());
+                newLocation = new Location(old.getX(), old.getY() - 16);
                 break;
             case DOWN:
-                newLocation = new Location(old.getX() - 16, old.getY());
+                newLocation = new Location(old.getX(), old.getY() + 16);
                 break;
         }
         setLocation(newLocation);
