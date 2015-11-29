@@ -52,7 +52,7 @@ public class GameInstance {
     private static boolean[][] levelMap;
     private static final List<Entity> entities = new LinkedList<>();
     private static final Map<String, Texture> textureMapping = new HashMap<>();
-    private static final int width = 800, height = 600;
+    private static final int width = 608, height = 650;
     private static boolean isLoaded = false;
     private static boolean acceptInput = false;
 

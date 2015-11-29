@@ -67,7 +67,8 @@ public class Level {
      */
     public void generate() {
         Random rng = new Random(seed);
-        int size = 100 + (rng.nextInt(50));
+        //int size = 100 + (rng.nextInt(50));
+        int size = 19;
         map = new boolean[size][size];
 
         int i = 0;
