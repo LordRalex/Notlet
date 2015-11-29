@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import net.ae97.notlet.Location;
+import net.ae97.notlet.network.packets.AttackRequestPacket;
+import net.ae97.notlet.network.packets.MoveRequestPacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.server.level.Level;
 
@@ -50,11 +52,49 @@ public class Player extends Entity {
             for (Packet packet : uniqueRequests) {
                 switch (packet.getType()) {
                     case MoveRequest: {
-
+                        MoveRequestPacket request = (MoveRequestPacket) packet;
+                        Location old = getLocation();
+                        Location newLocation = old;
+                        switch (request.getDirection()) {
+                            case LEFT:
+                                newLocation = new Location(old.getX() - 16, old.getY());
+                                break;
+                            case RIGHT:
+                                newLocation = new Location(old.getX() + 16, old.getY());
+                                break;
+                            case UP:
+                                newLocation = new Location(old.getX(), old.getY() - 16);
+                                break;
+                            case DOWN:
+                                newLocation = new Location(old.getX(), old.getY() + 16);
+                                break;
+                        }
+                        if (level.isPassable(newLocation)) {
+                            setLocation(newLocation);
+                        }
                     }
                     break;
                     case AttackRequest: {
-
+                        AttackRequestPacket request = (AttackRequestPacket) packet;
+                        Location old = getLocation();
+                        Location spawnLocation = old;
+                        switch (request.getDirection()) {
+                            case LEFT:
+                                spawnLocation = new Location(old.getX() - 16.0001, old.getY());
+                                break;
+                            case RIGHT:
+                                spawnLocation = new Location(old.getX() + 16.0001, old.getY());
+                                break;
+                            case UP:
+                                spawnLocation = new Location(old.getX(), old.getY() - 16.0001);
+                                break;
+                            case DOWN:
+                                spawnLocation = new Location(old.getX(), old.getY() + 16.0001);
+                                break;
+                        }
+                        if (level.isPassable(spawnLocation)) {
+                            level.spawnEntity(new Arrow(spawnLocation, request.getDirection()));
+                        }
                     }
                     break;
                 }
