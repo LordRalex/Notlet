@@ -75,6 +75,9 @@ public class Player extends Entity {
                     }
                     break;
                     case AttackRequest: {
+                        if (attackCooldown != 0) {
+                            break;
+                        }
                         AttackRequestPacket request = (AttackRequestPacket) packet;
                         Location old = getLocation();
                         Location spawnLocation = old;
@@ -94,6 +97,7 @@ public class Player extends Entity {
                         }
                         if (level.isPassable(spawnLocation)) {
                             level.spawnEntity(new Arrow(spawnLocation, request.getDirection()));
+                            attackCooldown = 10;
                         }
                     }
                     break;
