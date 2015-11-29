@@ -29,6 +29,7 @@ import java.util.Queue;
 import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.network.packets.AttackRequestPacket;
+import net.ae97.notlet.network.packets.EntityDamagePacket;
 import net.ae97.notlet.network.packets.EntitySpawnPacket;
 import net.ae97.notlet.network.packets.MoveRequestPacket;
 import net.ae97.notlet.network.packets.Packet;
@@ -117,6 +118,12 @@ public class Player extends Entity {
         if (attackCooldown > 0) {
             attackCooldown--;
         }
+    }
+
+    @Override
+    public void damage(int damage) {
+        super.damage(damage);
+        engine.sendPacket(new EntityDamagePacket(this.getId(), damage));
     }
 
     public void addToQueue(Packet p) {

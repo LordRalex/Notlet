@@ -54,6 +54,7 @@ public class GameEngine implements Runnable {
     private final ClientEngine client;
     private final Player player;
     private Location endPoint;
+    private int score = 0;
 
     public GameEngine(ClientEngine client, String seed) {
         this.client = client;
@@ -102,6 +103,7 @@ public class GameEngine implements Runnable {
                 level.killEntity(en);
                 sendPacket(new EntityDeathPacket(en.getId()));
                 player.addScore(en.getValue());
+                score += en.getValue();
             });
             if (player.getHp() <= 0) {
                 sendPacket(new EndGamePacket(player.getScore()));
@@ -112,6 +114,9 @@ public class GameEngine implements Runnable {
             level.processTick();
             if (player.isAt(endPoint)) {
                 sendPacket(new EndLevelPacket());
+                //Database.execute("INSERT INTO scores VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE score = ? WHERE username = ? AND level = ?",
+                        //client.getUsername(), level.getSeed(), score, score, client.getUsername(), level.getSeed());
+                score = 0;
                 if (isSingleLevel) {
                     sendPacket(new EndGamePacket(player.getScore()));
                     stop();

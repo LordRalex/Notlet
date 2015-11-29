@@ -46,6 +46,7 @@ public class ClientEngine extends Thread {
     private State state = State.Login;
     private ObjectOutputStream out;
     private GameEngine game;
+    private String username;
 
     public ClientEngine(Socket socket) {
         this.socket = socket;
@@ -69,6 +70,7 @@ public class ClientEngine extends Thread {
                                     LoginPacket packet = (LoginPacket) next;
                                     if (AuthenticationEngine.validate(packet.getUser(), packet.getPassword())) {
                                         sendPacket(new SuccessPacket());
+                                        username = packet.getUser();
                                         state = State.Pending;
                                     } else {
                                         sendPacket(new ErrorPacket("Invalid username/password"));
@@ -137,6 +139,10 @@ public class ClientEngine extends Thread {
 
     public Logger getLogger() {
         return ServerCore.getLogger();
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     private enum State {
