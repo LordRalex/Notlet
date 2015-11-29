@@ -23,18 +23,76 @@
  */
 package net.ae97.notlet.client;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
+import net.ae97.notlet.client.network.ServerConnection;
 import net.ae97.notlet.entity.Arrow;
 import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
+import net.ae97.notlet.network.packets.MoveRequestPacket;
+import net.ae97.notlet.network.packets.Packet;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class GameInstance {
 
+    private static ServerConnection connection;
     private static boolean[][] levelMap;
     private static final List<Entity> entities = new LinkedList<>();
+    private static final Map<String, Texture> textureMapping = new HashMap<>();
+    private static final int width = 600, height = 800;
+
+    public static void createTextures() throws LWJGLException {
+        Display.setDisplayMode(new DisplayMode(width, height));
+        Display.create();
+        Display.setVSyncEnabled(true);
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        // enable alpha blending
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GL11.glViewport(0, 0, width, height);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, width, height, 0, 1, -1);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+        try {
+            textureMapping.put("arrow", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("arrow.png")));
+            textureMapping.put("dirt", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("dirt.png")));
+            textureMapping.put("rangerD", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerD.png")));
+            textureMapping.put("rangerL", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerL.png")));
+            textureMapping.put("rangerR", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerR.png")));
+            textureMapping.put("rangerU", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png")));
+            textureMapping.put("skele", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("skele.png")));
+            textureMapping.put("slime", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("slime.png")));
+            textureMapping.put("wall", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png")));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void init(boolean[][] map, List<Entity> entityList, ServerConnection conn) {
+        init(map, entityList);
+        connection = conn;
+    }
 
     public static void init(boolean[][] map, List<Entity> entityList) {
         levelMap = map;
@@ -86,11 +144,17 @@ public class GameInstance {
         synchronized (entities) {
             Player player = getPlayer();
             renderBackground(player.getLocation());
+            renderExit(player.getLocation());
             entities.forEach((en) -> renderEntity(en, player.getLocation()));
         }
+
+        pollInput();
     }
 
     private static void renderEntity(Entity entity, Location reference) {
+        Texture texture = textureMapping.get(entity.getSprite());
+        texture.bind();
+        GL11.glBegin(GL11.GL_QUADS);
         if (entity instanceof Arrow) {
             Arrow arrow = (Arrow) entity;
             switch (arrow.getFacingDirection()) {
@@ -102,10 +166,48 @@ public class GameInstance {
                     GL11.glRotated(90, arrow.getSize() / 2, arrow.getSize() / 2, arrow.getSize() / 2);
             }
         }
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(0, 0);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(32, 0);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(32, 32);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(0, 32);
+        GL11.glEnd();
     }
 
     private static void renderBackground(Location reference) {
 
+    }
+
+    private static void renderExit(Location reference) {
+
+    }
+
+    private static void pollInput() {
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+            sendPacket(new MoveRequestPacket(Direction.LEFT));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            sendPacket(new MoveRequestPacket(Direction.RIGHT));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+            sendPacket(new MoveRequestPacket(Direction.UP));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            sendPacket(new MoveRequestPacket(Direction.DOWN));
+        }
+
+    }
+
+    private static void sendPacket(Packet packet) {
+        try {
+            connection.sendPacket(packet);
+        } catch (IOException ex) {
+            ClientCore.getLogger().log(java.util.logging.Level.SEVERE, "Error sending packet", ex);
+        }
     }
 
 }

@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import net.ae97.notlet.client.ClientCore;
+import net.ae97.notlet.client.GameInstance;
 import net.ae97.notlet.client.Testing;
 import net.ae97.notlet.client.network.GameProcessor;
 import net.ae97.notlet.client.network.ServerConnection;
@@ -70,6 +71,7 @@ public class LoadScreen extends JFrame {
                 StartGamePacket startGamePacket = new StartGamePacket(seed);
                 connection.sendPacket(startGamePacket);
                 dispose();
+                GameInstance.createTextures();
                 GameProcessor processor = new GameProcessor(connection);
                 processor.start();
                 Testing.display();

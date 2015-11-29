@@ -339,7 +339,6 @@ public class Testing {
     // Start the example
     //
     public void start() throws LWJGLException, IOException {
-        initGL(800, 600);
         init();
 
         render();
@@ -403,12 +402,10 @@ public class Testing {
     public void render() {
         Color.white.bind();
         Display.sync(60);
-        renderBG();
-        texture.bind();
+        //texture.bind();
         //dirt_Texture.bind();
         while (!Display.isCloseRequested()) {
 
-            renderBG();
             // render OpenGL here
             // Clear the screen and depth buffer
             renderMap();
@@ -424,22 +421,18 @@ public class Testing {
 
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             x -= 16;
-            renderBG();
             currentPlayer = textureL;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             x += 16;
-            renderBG();
             currentPlayer = textureR;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             y -= 16;
-            renderBG();
             currentPlayer = textureU;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             y += 16;
-            renderBG();
             currentPlayer = textureD;
         }
 
@@ -460,7 +453,10 @@ public class Testing {
     }
 
     public void renderMap() {
-        if (GameInstance.getMap() == null) return;
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        if (GameInstance.getMap() == null) {
+            return;
+        }
         boolean[][] map = GameInstance.getMap();
         dirt.bind();
         for (int i = 0; i < map.length; i++) {
@@ -470,7 +466,6 @@ public class Testing {
                 }
             }
         }
-
 
         wall.bind();
         for (int i = 0; i < map.length; i++) {
@@ -483,43 +478,16 @@ public class Testing {
 
     }
 
-
     public void renderFG(int x, int y) {
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0);
         GL11.glVertex2f(x, y);
         GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(x+32, y);
+        GL11.glVertex2f(x + 32, y);
         GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(x+32, y+32);
+        GL11.glVertex2f(x + 32, y + 32);
         GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(x, y+32);
-        GL11.glEnd();
-    }
-
-    public void renderBG() {
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        backg.bind(); // or GL11.glBind(texture.getTextureID());
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2f(0, 0);
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(100, 0);
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(100, 100);
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(0, 100);
-        GL11.glEnd();
-
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2f(500, 0);
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(500, 100);
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(600, 100);
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(600, 0);
+        GL11.glVertex2f(x, y + 32);
         GL11.glEnd();
     }
 
@@ -547,4 +515,3 @@ public class Testing {
         new Testing().start();
     }
 }
-

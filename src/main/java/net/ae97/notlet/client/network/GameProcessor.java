@@ -51,7 +51,7 @@ public class GameProcessor extends Thread {
                     }
                     case StartLevel: {
                         StartLevelPacket packet = (StartLevelPacket) next;
-                        GameInstance.init(packet.getMap(), packet.getEntities());
+                        GameInstance.init(packet.getMap(), packet.getEntities(), connection);
                     }
                     break;
                 }
