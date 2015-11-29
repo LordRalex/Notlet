@@ -24,7 +24,9 @@
 package net.ae97.notlet.client.network;
 
 import java.io.IOException;
+import javax.swing.JOptionPane;
 import net.ae97.notlet.client.GameInstance;
+import net.ae97.notlet.network.packets.EndGamePacket;
 import net.ae97.notlet.network.packets.EntityDamagePacket;
 import net.ae97.notlet.network.packets.EntityDeathPacket;
 import net.ae97.notlet.network.packets.EntityLocationUpdatePacket;
@@ -48,7 +50,9 @@ public class GameProcessor extends Thread {
                 Packet next = connection.readPacket();
                 switch (next.getType()) {
                     case EndGame: {
+                        GameInstance.setAcceptUserInput(false);
                         interrupt();
+                        JOptionPane.showMessageDialog(null, "Score: " + ((EndGamePacket) next).getFinalScore());
                     }
                     break;
                     case EndLevel: {

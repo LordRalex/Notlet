@@ -31,6 +31,7 @@ import java.util.Map;
 import net.ae97.notlet.Direction;
 import net.ae97.notlet.Location;
 import net.ae97.notlet.client.network.ServerConnection;
+import net.ae97.notlet.entity.Arrow;
 import net.ae97.notlet.entity.Entity;
 import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.network.packets.AttackRequestPacket;
@@ -53,6 +54,7 @@ public class GameInstance {
     private static final Map<String, Texture> textureMapping = new HashMap<>();
     private static final int width = 800, height = 600;
     private static boolean isLoaded = false;
+    private static boolean acceptInput = false;
 
     public static void createTextures() throws LWJGLException {
         Display.setDisplayMode(new DisplayMode(width, height));
@@ -98,18 +100,25 @@ public class GameInstance {
 
     public static void unload() {
         isLoaded = false;
+        acceptInput = false;
+    }
+
+    public static void setAcceptUserInput(boolean accept) {
+        acceptInput = accept;
     }
 
     public static void init(boolean[][] map, List<Entity> entityList, ServerConnection conn) {
         init(map, entityList);
         connection = conn;
         isLoaded = true;
+        acceptInput = true;
     }
 
     public static void init(boolean[][] map, List<Entity> entityList) {
         levelMap = map;
         entities.addAll(entityList);
         isLoaded = true;
+        acceptInput = true;
     }
 
     public static boolean[][] getMap() {
@@ -182,6 +191,17 @@ public class GameInstance {
         GL11.glVertex2d((x * 32) + texture.getTextureWidth() * SpriteScaleFactor, (y * 32) + texture.getTextureHeight() * SpriteScaleFactor);
         GL11.glTexCoord2f(0, 1);
         GL11.glVertex2d(x * 32, (y * 32) + texture.getTextureHeight() * SpriteScaleFactor);
+        if (entity instanceof Arrow) {
+            Arrow arrow = (Arrow) entity;
+            switch (arrow.getFacingDirection()) {
+                case DOWN:
+                    GL11.glRotated(90, 0, 0, 0);
+                case LEFT:
+                    GL11.glRotated(90, 0, 0, 0);
+                case UP:
+                    GL11.glRotated(90, 0, 0, 0);
+            }
+        }
         GL11.glEnd();
     }
 
@@ -215,6 +235,9 @@ public class GameInstance {
     }
 
     private static void pollInput() {
+        if (!acceptInput) {
+            return;
+        }
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             sendPacket(new MoveRequestPacket(Direction.LEFT));
             getPlayer().setFacingDirection(Direction.LEFT);

@@ -89,16 +89,16 @@ public class Player extends Entity {
                         Location spawnLocation = old;
                         switch (request.getDirection()) {
                             case LEFT:
-                                spawnLocation = new Location(old.getX() - 0001, old.getY());
+                                spawnLocation = new Location(old.getX() - .1, old.getY());
                                 break;
                             case RIGHT:
-                                spawnLocation = new Location(old.getX() + 0001, old.getY());
+                                spawnLocation = new Location(old.getX() + getBlockSize() + .1, old.getY());
                                 break;
                             case UP:
-                                spawnLocation = new Location(old.getX(), old.getY() - 0001);
+                                spawnLocation = new Location(old.getX(), old.getY() - .1);
                                 break;
                             case DOWN:
-                                spawnLocation = new Location(old.getX(), old.getY() + 0001);
+                                spawnLocation = new Location(old.getX(), old.getY() + getBlockSize() + .1);
                                 break;
                         }
                         if (level.isPassable(spawnLocation, new Location(spawnLocation.getX() + getBlockSize(), spawnLocation.getY() + getBlockSize()))) {

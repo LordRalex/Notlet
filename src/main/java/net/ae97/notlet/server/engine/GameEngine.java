@@ -60,10 +60,10 @@ public class GameEngine implements Runnable {
         logger = LoggerFactory.create("Engine-" + threadId);
         if (seed == null || seed.isEmpty()) {
             isSingleLevel = false;
-            level = new Level();
+            level = new Level(this);
         } else {
             isSingleLevel = true;
-            level = new Level(seed.hashCode());
+            level = new Level(seed.hashCode(), this);
         }
         player = new Player(new Location(0, 0), this);
         level.spawnEntity(player);
@@ -113,7 +113,7 @@ public class GameEngine implements Runnable {
                     sendPacket(new EndGamePacket(player.getScore()));
                     stop();
                 } else {
-                    level = new Level();
+                    level = new Level(this);
                     level.generate();
                     endPoint = new Location(level.getSize(), level.getSize());
                     player.setLocation(new Location(0, 0));

@@ -35,6 +35,8 @@ import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.entity.PointBooster;
 import net.ae97.notlet.entity.Skeleton;
 import net.ae97.notlet.entity.Slime;
+import net.ae97.notlet.network.packets.EntityDeathPacket;
+import net.ae97.notlet.server.engine.GameEngine;
 
 /**
  * @author John
@@ -45,13 +47,15 @@ public class Level {
     private boolean[][] map = new boolean[0][0];
     private final List<Entity> entities = new LinkedList<>();
     private final Stack<Entity> toKill = new Stack<>();
+    private final GameEngine engine;
 
-    public Level() {
-        this(new Random().nextInt());
+    public Level(GameEngine engine) {
+        this(new Random().nextInt(), engine);
     }
 
-    public Level(int seed) {
+    public Level(int seed, GameEngine engine) {
         this.seed = seed;
+        this.engine = engine;
     }
 
     /**
@@ -142,6 +146,7 @@ public class Level {
 
     public void processTick() {
         synchronized (toKill) {
+            toKill.stream().forEach((en) -> engine.sendPacket(new EntityDeathPacket(en.getId())));
             entities.removeAll(toKill);
             toKill.clear();
         }

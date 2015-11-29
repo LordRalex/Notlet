@@ -63,7 +63,7 @@ public class Arrow extends Entity {
             if (en == this) {
                 continue;
             }
-            if (en.hasCollidedWith(this)) {
+            if (en instanceof Monster && en.hasCollidedWith(this)) {
                 en.damage(damage);
                 level.killEntity(this);
             }
