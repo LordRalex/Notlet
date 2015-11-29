@@ -105,7 +105,7 @@ public class Player extends Entity {
                             Arrow arrow = new Arrow(spawnLocation, request.getDirection());
                             level.spawnEntity(arrow);
                             engine.sendPacket(new EntitySpawnPacket(arrow));
-                            attackCooldown = 10;
+                            attackCooldown = 40;
                         }
                     }
                     break;

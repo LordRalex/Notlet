@@ -36,6 +36,7 @@ import net.ae97.notlet.entity.Player;
 import net.ae97.notlet.logging.LoggerFactory;
 import net.ae97.notlet.network.packets.EndGamePacket;
 import net.ae97.notlet.network.packets.EndLevelPacket;
+import net.ae97.notlet.network.packets.EntityDeathPacket;
 import net.ae97.notlet.network.packets.EntityLocationUpdatePacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
@@ -98,6 +99,8 @@ public class GameEngine implements Runnable {
                 if (!(en instanceof Player)) {
                     return;
                 }
+                level.killEntity(en);
+                sendPacket(new EntityDeathPacket(en.getId()));
                 player.addScore(en.getValue());
             });
             if (player.getHp() <= 0) {

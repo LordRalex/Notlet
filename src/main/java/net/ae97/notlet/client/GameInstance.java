@@ -86,8 +86,8 @@ public class GameInstance {
             textureMapping.put("rangerU", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("rangerU.png")));
             textureMapping.put("skele", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("skele.png")));
             textureMapping.put("slime", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("slime.png")));
-            textureMapping.put("hp", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("skele.png")));
-            textureMapping.put("pb", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("slime.png")));
+            textureMapping.put("hp", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("hp.png")));
+            textureMapping.put("pb", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("pb.png")));
             textureMapping.put("wall", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png")));
         } catch (IOException ex) {
             throw new RuntimeException(ex);

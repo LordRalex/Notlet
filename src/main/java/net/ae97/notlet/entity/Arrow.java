@@ -33,7 +33,7 @@ public class Arrow extends Entity {
     private final int damage = 10;
 
     public Arrow(Location loc, Direction direction) {
-        super(loc, 1, 0, "arrow", 0.07, 16, .92);
+        super(loc, 1, 0, "arrow", 0.1, 16, .92);
         this.direction = direction;
     }
 
