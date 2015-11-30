@@ -40,7 +40,6 @@ public class LoggerStream extends PrintStream {
 
     @Override
     public void write(byte[] b) {
-        logger.info("Ex");
         logger.log(level, new String(b));
     }
 
