@@ -61,7 +61,6 @@ public class GameInstance {
     private static TrueTypeFont font;
 
     public static void createTextures() throws LWJGLException {
-
         Display.setDisplayMode(new DisplayMode(width, height));
         Display.create();
         Display.setVSyncEnabled(true);
@@ -100,6 +99,7 @@ public class GameInstance {
             textureMapping.put("hp", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("hp.png")));
             textureMapping.put("pb", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("pb.png")));
             textureMapping.put("wall", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("wall.png")));
+            textureMapping.put("exit", TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("exit.png")));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -109,16 +109,10 @@ public class GameInstance {
         connection = conn;
         Color.white.bind();
         Display.sync(60);
-        //texture.bind();
-        //dirt_Texture.bind();
+
         while (!Display.isCloseRequested()) {
-
-            // render OpenGL here
-            // Clear the screen and depth buffer
             GameInstance.renderFrame();
-
             Display.update();
-
         }
 
         connection.close();
@@ -201,10 +195,9 @@ public class GameInstance {
         }
         synchronized (entities) {
             Player player = getPlayer();
-            renderBackground(player.getLocation());
+            renderBackground();
             renderHUD(player);
-            renderExit(player.getLocation());
-            entities.forEach((en) -> renderEntity(en, player.getLocation()));
+            entities.forEach((en) -> renderEntity(en));
         }
 
         pollInput();
@@ -236,22 +229,9 @@ public class GameInstance {
         GL11.glTexCoord2f(0, 1);
         GL11.glVertex2f(20, 630);
         GL11.glEnd();
-
-        /*font.drawString(65, 630, Integer.toString(player.getScore()), Color.white);
-         textureMapping.get("score").bind();
-         GL11.glBegin(GL11.GL_QUADS);
-         GL11.glTexCoord2f(0, 0);
-         GL11.glVertex2f(20, 630);
-         GL11.glTexCoord2f(1, 0);
-         GL11.glVertex2f(60, 630);
-         GL11.glTexCoord2f(1, 1);
-         GL11.glVertex2f(60, 650);
-         GL11.glTexCoord2f(0, 1);
-         GL11.glVertex2f(20, 650);
-         GL11.glEnd();*/
     }
 
-    private static void renderEntity(Entity entity, Location reference) {
+    private static void renderEntity(Entity entity) {
         int SpriteScaleFactor = 1;
         double x = entity.getLocation().getX();
         double y = entity.getLocation().getY();
@@ -280,7 +260,7 @@ public class GameInstance {
         GL11.glEnd();
     }
 
-    private static void renderBackground(Location reference) {
+    private static void renderBackground() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         if (GameInstance.getMap() == null) {
             return;
@@ -303,10 +283,9 @@ public class GameInstance {
                 }
             }
         }
-    }
 
-    private static void renderExit(Location reference) {
-
+        textureMapping.get("exit").bind();
+        renderFG((map.length - 1) * 32, (map.length - 1) * 32);
     }
 
     private static void pollInput() {
