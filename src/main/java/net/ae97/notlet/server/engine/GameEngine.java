@@ -40,6 +40,7 @@ import net.ae97.notlet.network.packets.EntityDeathPacket;
 import net.ae97.notlet.network.packets.EntityLocationUpdatePacket;
 import net.ae97.notlet.network.packets.Packet;
 import net.ae97.notlet.network.packets.StartLevelPacket;
+import net.ae97.notlet.server.database.Database;
 import net.ae97.notlet.server.level.Level;
 
 public class GameEngine implements Runnable {
@@ -114,8 +115,8 @@ public class GameEngine implements Runnable {
             level.processTick();
             if (player.isAt(endPoint)) {
                 sendPacket(new EndLevelPacket());
-                //Database.execute("INSERT INTO scores VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE score = ? WHERE username = ? AND level = ?",
-                        //client.getUsername(), level.getSeed(), score, score, client.getUsername(), level.getSeed());
+                Database.execute("INSERT INTO scores VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE score = ?",
+                        client.getUsername(), level.getSeed(), score, score);
                 score = 0;
                 if (isSingleLevel) {
                     sendPacket(new EndGamePacket(player.getScore()));
